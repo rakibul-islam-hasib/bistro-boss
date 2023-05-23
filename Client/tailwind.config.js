@@ -9,6 +9,7 @@ export default {
       fontFamily: { 
         'Cinzel' : ['Cinzel', 'serif'],
         'Inter' : ['Inter', 'sans-serif'],
+        'raleway' : ['Raleway', 'sans-serif'],
       }
     },
   },
