@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from '../header/hero/Slider';
 import CategoryCard from './CategoryCard/CategoryCard';
+import ChefService from '../shared/ChefService';
 
 const Home = () => {
     return (
@@ -9,6 +10,7 @@ const Home = () => {
            <Slider />
            </div>
            <CategoryCard />
+           <ChefService />
         </div>
     );
 };

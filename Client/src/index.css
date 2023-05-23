@@ -9,10 +9,7 @@ body {
 }
 
 .thumbs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 10px;
+  @apply  flex-wrap justify-center mt-10  md:flex hidden;
   /* color: ; */
 }
 

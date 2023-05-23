@@ -10,7 +10,6 @@ import slider4 from '../../../assets/home/slide4.jpg';
 import slider5 from '../../../assets/home/slide5.jpg';
 import SectionTitle from '../../shared/SectionTitle';
 
-
 const CategoryCard = () => {
     const [slidesPerView, setSlidesPerView] = useState(4);
 
@@ -56,24 +55,44 @@ const CategoryCard = () => {
                 className="mySwiper max-w-[80%] mx-auto"
             >
                 <SwiperSlide>
-                    <img src={slider1} alt="" />
-                    <h1 className='text-3xl text-center uppercase font-bold -mt-14 text-white shadow-lg'>Salads</h1>
+                    <div className="relative">
+                        <img src={slider1} alt="" />
+                        <div className="absolute bottom-0  p-4 bg-white bg-opacity-30 backdrop-filter w-full backdrop-blur-md">
+                            <h1 className='text-3xl text-center uppercase font-bold text-white'>Salads</h1>
+                        </div>
+                    </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={slider2} alt="" />
-                    <h1 className='text-3xl text-center uppercase font-bold -mt-14 text-white shadow-lg'>Soups</h1>
+                    <div className="relative">
+                        <img src={slider2} alt="" />
+                        <div className="absolute bottom-0  p-4 bg-white bg-opacity-30 backdrop-filter w-full backdrop-blur-md">
+                            <h1 className='text-3xl text-center uppercase font-bold text-white'>Soups</h1>
+                        </div>
+                    </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={slider3} alt="" />
-                    <h1 className='text-3xl text-center uppercase font-bold -mt-14 text-white shadow-lg'>pizzas</h1>
+                    <div className="relative">
+                        <img src={slider3} alt="" />
+                        <div className="absolute bottom-0  p-4 bg-white bg-opacity-30 backdrop-filter w-full backdrop-blur-md">
+                            <h1 className='text-3xl text-center uppercase font-bold text-white'>Pizzas</h1>
+                        </div>
+                    </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={slider4} alt="" />
-                    <h1 className='text-3xl text-center uppercase font-bold -mt-14 text-white shadow-lg'>desserts</h1>
+                    <div className="relative">
+                        <img src={slider4} alt="" />
+                        <div className="absolute bottom-0  p-4 bg-white bg-opacity-30 backdrop-filter w-full backdrop-blur-md">
+                            <h1 className='text-3xl text-center uppercase font-bold text-white'>Desserts</h1>
+                        </div>
+                    </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={slider5} alt="" />
-                    <h1 className='text-3xl text-center uppercase font-bold -mt-14 text-white shadow-lg'>salads</h1>
+                    <div className="relative">
+                        <img src={slider5} alt="" />
+                        <div className="absolute bottom-0  p-4 bg-white bg-opacity-40 backdrop-filter w-full backdrop-blur-md">
+                            <h1 className='text-3xl text-center uppercase font-bold text-white'>Salads</h1>
+                        </div>
+                    </div>
                 </SwiperSlide>
             </Swiper>
         </div>
