@@ -10,18 +10,24 @@ import img5 from '../../../assets/home/05.png'
 import img6 from '../../../assets/home/06.png'
 const Slider = () => {
     return (
-        <Carousel className=''>
+        <Carousel emulateTouch className=''>
             <div>
-                <img src={img1} />
-                <p className="legend">Legend 1</p>
+                <img className='' src={img1} />
             </div>
             <div>
-                <img src={img2} />
-                <p className="legend">Legend 1</p>
+                <img className='' src={img2} />
             </div>
             <div>
-                <img src={img3} />
-                <p className="legend">Legend 1</p>
+                <img className='' src={img3} />
+            </div>
+            <div>
+                <img className='' src={img4} />
+            </div>
+            <div>
+                <img className='' src={img5} />
+            </div>
+            <div>
+                <img className='' src={img6} />
             </div>
 
         </Carousel>
