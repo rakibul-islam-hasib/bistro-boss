@@ -4,6 +4,7 @@ import CategoryCard from './CategoryCard/CategoryCard';
 import ChefService from '../shared/ChefService';
 import HomeMenuItem from '../MenuItem/HomeMenuItem';
 import FeaturedItem from './Featured/FeaturedItem';
+import Testimonials from './testimonials/Testimonials';
 
 const Home = () => {
     return (
@@ -15,6 +16,7 @@ const Home = () => {
             <ChefService />
             <HomeMenuItem />
             <FeaturedItem />
+            <Testimonials />
         </div>
     );
 };
