@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.my-carousel {
+    height: 300px; /* Set the desired fixed height */
+  }
+
+
+  .thumbs  { 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
