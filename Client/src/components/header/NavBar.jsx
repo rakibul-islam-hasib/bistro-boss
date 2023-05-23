@@ -22,6 +22,9 @@ const NavBar = () => {
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    const [navBg, setNavBg] = useState('bg-[#15151580]');
 
     useEffect(() => {
         setIsLogin(location.pathname === '/login');
@@ -30,11 +33,29 @@ const NavBar = () => {
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
- 
+    useEffect(() => {
+        const handleScroll = () => {
+          const currentPosition = window.pageYOffset;
+          setScrollPosition(currentPosition);
+        };
+    
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []);
+    
+      useEffect(() => {
+        if (scrollPosition > 1000) {
+          setNavBg('bg-black');
+        } else {
+          setNavBg('bg-[#15151580]');
+        }
+      }, [scrollPosition]);
 
     return (
         <motion.nav
-            className="bg-[#15151580]  fixed top-0 text-white w-full z-10"
+            className={`${navBg}  fixed top-0 transition-colors duration-500 ease-in-out text-white w-full z-10`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -43,10 +64,10 @@ const NavBar = () => {
                 <div className="flex px-4 items-center justify-between py-4">
                     {/* Logo */}
                     <div className="flex-shrink-0 pl-7 md:p-0 flex items-center">
-                      <div className="">
-                            <h1 className='text-2xl font-Cinzel font-bold'>BISTRO BOSS</h1>                        
+                        <div className="">
+                            <h1 className='text-2xl font-Cinzel font-bold'>BISTRO BOSS</h1>
                             <p className='font-bold tracking-[8px]'>Restaurant</p>
-                      </div>
+                        </div>
                     </div>
 
                     {/* Mobile Menu Icon */}

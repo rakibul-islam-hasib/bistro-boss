@@ -25,6 +25,9 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+            <div className="w-full bg-black text-center py-5">
+                <p className='text-white'>Copyright © CulinaryCloud. All rights reserved.</p>
+            </div>
         </>
     );
 };
