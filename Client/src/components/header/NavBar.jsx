@@ -2,14 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars } from 'react-icons/fa';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FcSettings } from 'react-icons/fc';
 const navLinks = [
     {
         name: 'Home',
         route: '/'
     },
     {
-        name: 'All Toys',
+        name: 'User',
         route: '/toys'
     },
     {
