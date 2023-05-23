@@ -5,16 +5,21 @@
 @tailwind utilities;
 
 body {
-    font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-  .thumbs  { 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 10px;
-    /* color: ; */
-  }
-.carousel-status {
-     @apply hidden;
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+  /* color: ; */
 }
+
+.carousel-status {
+  @apply hidden;
+}
+.swiper-pagination  { 
+  position: static !important;
+  margin-top: 30px !important;
+} 
