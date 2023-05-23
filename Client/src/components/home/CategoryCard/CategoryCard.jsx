@@ -8,6 +8,7 @@ import slider2 from '../../../assets/home/slide2.jpg';
 import slider3 from '../../../assets/home/slide3.jpg';
 import slider4 from '../../../assets/home/slide4.jpg';
 import slider5 from '../../../assets/home/slide5.jpg';
+import SectionTitle from '../../shared/SectionTitle';
 
 
 const CategoryCard = () => {
@@ -37,11 +38,8 @@ const CategoryCard = () => {
 
     return (
         <div className='my-24'>
-            <div className="w-[30%] mx-auto text-center">
-                <h1 className='text-[#D99904] text-xl  font-semibold italic'>---From 11:00am to 10:00pm---</h1>
-                <div className="border-b-2 my-3"></div>
-                <h1 className='text-3xl font-bold'>ORDER ONLINE</h1>
-                <div className="border-b-2 my-3"></div>
+            <div className="mb-16">
+                <SectionTitle title={'From 11:00am to 10:00pm'} body={'ORDER ONLINE'} />
             </div>
             <Swiper
                 slidesPerView={slidesPerView}
