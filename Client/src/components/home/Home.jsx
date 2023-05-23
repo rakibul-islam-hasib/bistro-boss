@@ -3,6 +3,7 @@ import Slider from '../header/hero/Slider';
 import CategoryCard from './CategoryCard/CategoryCard';
 import ChefService from '../shared/ChefService';
 import HomeMenuItem from '../MenuItem/HomeMenuItem';
+import FeaturedItem from './Featured/FeaturedItem';
 
 const Home = () => {
     return (
@@ -13,6 +14,7 @@ const Home = () => {
             <CategoryCard />
             <ChefService />
             <HomeMenuItem />
+            <FeaturedItem />
         </div>
     );
 };
