@@ -12,9 +12,9 @@ const navLinks = [
         route: '/menu'
     },
     {
-        name: 'Blog',
-        route: '/blog'
-    }
+        name: 'Our Shop',
+        route: '/shop'
+    }, 
 ];
 
 const NavBar = () => {
