@@ -2,7 +2,7 @@ import React from 'react';
 import SectionTitle from '../../shared/SectionTitle';
 import MenuItem from '../../MenuItem/MenuItem';
 
-const MenuCategory = ({ item = [], sTitle, sBody, btn = 'ORDER YOUR FAVOURITE FOOD' }) => {
+const MenuCategory = ({ item = [], sTitle, sBody, btn = 'ORDER YOUR FAVOURITE FOOD', onClick }) => {
     return (
         <>
             <div className="my-16">
@@ -14,7 +14,7 @@ const MenuCategory = ({ item = [], sTitle, sBody, btn = 'ORDER YOUR FAVOURITE FO
                 }
             </div>
             <div className="text-center mt-5">
-                <button className='px-10 py-3 uppercase text-black hover:bg-black hover:text-white  duration-500 border-b-4 border-b-black rounded-xl'>{btn}</button>
+                <button onClick={() => onClick()} className='px-10 py-3 uppercase text-black hover:bg-black hover:text-white  duration-500 border-b-4 border-b-black rounded-xl'>{btn}</button>
             </div>
         </>
     );
