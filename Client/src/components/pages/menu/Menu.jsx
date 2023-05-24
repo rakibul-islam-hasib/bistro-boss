@@ -29,14 +29,14 @@ const Menu = () => {
             <MenuCategory onClick={() => navigate('/shop', { state: { idx: 3 } })} item={dessert} />
             {/* Pizza  */}
             <SectionCover title='pizza' subTitle={'Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'} img={pizzaBg} />
-            <MenuCategory item={pizza} />
+            <MenuCategory item={pizza} onClick={()=>navigate('/shop' , {state : {idx : 1}})} btn='View our pizzas' />
             {/* SOUP  */}
             <SectionCover title='soup' subTitle={'Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'} img={soupBg} />
-            <MenuCategory item={soup} />
+            <MenuCategory item={soup} onClick={()=>navigate('/shop' , {state : {idx : 2}})} btn='View our Soup'/>
             {/* SOUP  */}
             <SectionCover title='salad'
                 subTitle={'Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'} img={saladBg} />
-            <MenuCategory item={salad} />
+            <MenuCategory item={salad} onClick={()=>navigate('/shop' , {state : {idx : 0}})} btn='View our Salads'/>
         </div>
     );
 };
