@@ -19,7 +19,7 @@ const ChefRecommended = () => {
 
                             <button
                                 className="bg-[#E8E8E8] px-8 py-3 border-b-4 hover:bg-black hover:text-white duration-300 hover:border-b-black rounded-xl border-b-[#BB8506]">
-                                Add to order
+                                Add to cart
                             </button>
                         </div>
                     </div>

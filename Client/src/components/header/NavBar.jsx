@@ -8,8 +8,8 @@ const navLinks = [
         route: '/'
     },
     {
-        name: 'User',
-        route: '/toys'
+        name: 'Our Menu',
+        route: '/menu'
     },
     {
         name: 'Blog',
@@ -88,7 +88,7 @@ const NavBar = () => {
                                 {navLinks.map((link) => (
                                     <li key={link.route}>
                                         <NavLink
-                                            className={({ isActive }) => `font-bold ${isActive ? 'text-primary' : 'text-white'} hover:text-primary duration-300`}
+                                            className={({ isActive }) => `font-bold ${isActive ? 'text-[#EEFF25]' : 'text-white'} hover:text-primary duration-300`}
                                             to={link.route}
 
                                             style={{ whiteSpace: 'nowrap' }}
