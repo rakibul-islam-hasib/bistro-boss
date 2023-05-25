@@ -15,6 +15,10 @@ const navLinks = [
         name: 'Our Shop',
         route: '/shop'
     }, 
+    {
+        name: 'Login',
+        route: '/login'
+    },
 ];
 
 const NavBar = () => {
