@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from '../config/firebase/firebase.config';
 
 
@@ -17,7 +17,13 @@ const AuthProvider = ({ children }) => {
             throw error
         }
     }
-
+    const login = async (email, password) => {
+        try {
+            return await signInWithEmailAndPassword(auth, email, password)
+        } catch (error) {
+            throw error
+        }
+    }
 
     // Observe user state (auth)
     useEffect(() => {
@@ -27,7 +33,7 @@ const AuthProvider = ({ children }) => {
         });
         return () => unsubscribe();
     }, [])
-    const contextVale = { user, loader, setLoader, signUp }
+    const contextVale = { user, loader, setLoader, signUp , login  }
     return (
         <AuthContext.Provider value={contextVale}>
             {children}
