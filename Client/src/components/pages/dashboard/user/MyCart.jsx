@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import { useCart } from '../../../../hooks/useCart';
-
+import Pagination from '@mui/material/Pagination';
+import { Stack } from '@mui/material';
 const MyCart = () => {
     const [cart] = useCart();
-    console.log("🚀 ~ file: MyCart.jsx:7 ~ MyCart ~ cart:", cart);
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [data, setData] = useState([]);
+    console.log("🚀 ~ file: MyCart.jsx:9 ~ MyCart ~ currentPage:", currentPage)
+    const itemPerPage = 5;
+    const totalItem = cart.length;
+    const pageCount = Math.ceil(totalItem / itemPerPage);
+    const handelPageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+    useEffect(()=>{
+        const start = (currentPage-1)*itemPerPage;
+        const end = currentPage*itemPerPage;
+        setData(cart.slice(start,end))
+    },[currentPage])
     return (
         <div>
             <div className="my-8">
@@ -28,8 +41,8 @@ const MyCart = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="gap-7">
-                                            {cart.map((item) => (
-                                                <tr  key={item._id} className=''>
+                                            {data.map((item) => (
+                                                <tr key={item._id} className=''>
                                                     <td className="py-4">
                                                         <div className="flex items-center">
                                                             <img
@@ -54,6 +67,9 @@ const MyCart = () => {
                                         </tbody>
                                     </table>
                                 </div>
+                                <Stack spacing={2}>
+                                    <Pagination onChange={handelPageChange} count={pageCount} color="primary" />
+                                </Stack>
                             </div>
                             <div className="md:w-1/4">
                                 <div className="bg-white rounded-lg shadow-md p-6">
