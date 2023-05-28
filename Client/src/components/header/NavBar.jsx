@@ -120,13 +120,13 @@ const NavBar = () => {
                                             className={` cursor-pointer  text-white font-bold hover:text-primary duration-300`}
                                             onClick={() => {
                                                 Swal.fire({
-                                                    title: 'Are you sure?',
+                                                    title: 'Are you sure to logout ?',
                                                     text: "You won't be able to revert this!",
                                                     icon: 'warning',
                                                     showCancelButton: true,
                                                     confirmButtonColor: '#3085d6',
                                                     cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Yes, delete it!'
+                                                    confirmButtonText: 'Yes, log me out!'
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         logout()

@@ -2,17 +2,19 @@ import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../../../providers/AuthProvider';
 import Modal from '../../Modal/Modal';
 import { useCart } from '../../../hooks/useCart';
+import { toast } from 'react-hot-toast';
 
 const ShopCards = ({ data = [] }) => {
     const { user } = useContext(AuthContext);
-    const [cart , refetch] = useCart();
+    const [cart, refetch] = useCart();
     const onClickHandler = itm => {
         if (cart.find(c => c._id === itm._id)) {
+            toast.error("Item is already added to cart")
             return;
         }
         if (user && user.email) {
             const item = { ...itm, email: user.email }
-            console.log(item)
+            // console.log(item)
             fetch('http://localhost:5000/cart', {
                 method: 'POST',
                 headers: {
@@ -24,6 +26,7 @@ const ShopCards = ({ data = [] }) => {
                 .then(data => {
                     console.log(data)
                     if (data.insertedId) {
+                        toast.success("Item added to cart")
                         refetch();
                     }
                 })
