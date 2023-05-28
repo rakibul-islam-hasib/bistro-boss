@@ -45,7 +45,7 @@ const Dashboard = () => {
 
     return (
         <div className="grid bg-[#F6F6F6] grid-cols-10">
-            <div className="col-span-2 sticky top-0 font-Cinzel px-5 py-5 bg-[#D1A054] msdin-h-screen">
+            <div className="col-span-2 sticky hidden md:block top-0 font-Cinzel px-5 py-5 bg-[#D1A054] msdin-h-screen">
                 <div className="text-center mt-4">
                     <h1 className='uppercase text-2xl font-Cinzel font-bold'>Bistro BOSS</h1>
                     <p className='tracking-[0.6rem] font-Cinzel'>Restaurant</p>
