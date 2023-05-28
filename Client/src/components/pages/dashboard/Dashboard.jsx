@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AiFillHome, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BsFillCalendarCheckFill } from 'react-icons/bs';
 import { FaSwatchbook } from 'react-icons/fa';
 import { ImSpoonKnife } from 'react-icons/im';
 import { TbStarsFilled } from 'react-icons/tb';
 import { NavLink, Outlet } from 'react-router-dom';
+import { AuthContext } from '../../../providers/AuthProvider';
 
 const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false);
-
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
+    const {loader} = useContext(AuthContext);
+    if (loader) {
+        return <div className="h-screen w-screen flex justify-center items-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+    }
 
     const menuItems = [
         {
@@ -41,8 +44,8 @@ const Dashboard = () => {
     ];
 
     return (
-        <div className="grid grid-cols-10">
-            <div className="col-span-2 sticky top-0 font-Cinzel px-5 py-5 bg-[#D1A054] min-h-screen">
+        <div className="grid bg-[#F6F6F6] grid-cols-10">
+            <div className="col-span-2 sticky top-0 font-Cinzel px-5 py-5 bg-[#D1A054] msdin-h-screen">
                 <div className="text-center mt-4">
                     <h1 className='uppercase text-2xl font-Cinzel font-bold'>Bistro BOSS</h1>
                     <p className='tracking-[0.6rem] font-Cinzel'>Restaurant</p>
@@ -61,7 +64,7 @@ const Dashboard = () => {
                     </ul>
                 </div>
             </div>
-            <div className="col-span-8 w-full">
+            <div className="col-span-8 w-full h-full">
                 <Outlet />
             </div>
         </div>
