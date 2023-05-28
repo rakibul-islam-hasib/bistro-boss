@@ -10,7 +10,7 @@ const ShopCards = ({ data = [] }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [carts, setCarts] = useState([])
     useEffect(() => {
-        fetch('http://localhost:5000/carts')
+        fetch(`http://localhost:5000/cart?email=${user?.email}`)
             .then(res => res.json())
             .then(data => setCarts(data))
     }, [])
@@ -18,16 +18,17 @@ const ShopCards = ({ data = [] }) => {
         setIsModalOpen(true);
     };
     const onClickHandler = itm => {
-        if (!user && !user?.email) {
+        if (!user || !user.email) {
             openModal();
+            return;
         }
-        if (user && carts.find(c => c._id === itm._id)) {
-            toast.error("Item is already added to cart")
+        if (user && carts.some(c => JSON.stringify(c) === JSON.stringify(itm))) {
+            toast.error("Item is already added to cart");
             return;
         }
         if (user && user.email) {
-            const item = { ...itm, email: user.email }
-            // console.log(item)
+            const { _id, ...itemData } = itm; // Create a new object without the _id field
+            const item = { ...itemData, email: user.email };
             fetch('http://localhost:5000/cart', {
                 method: 'POST',
                 headers: {
@@ -37,16 +38,20 @@ const ShopCards = ({ data = [] }) => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    console.log(data);
                     if (data.insertedId) {
-                        toast.success("Item added to cart")
+                        toast.success("Item added to cart");
                         refetch();
                     }
                 })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         } else {
             openModal();
         }
-    }
+    };
+
     return (
         <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 ">

@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GiCrossMark } from 'react-icons/gi';
+import { AuthContext } from '../../providers/AuthProvider';
 const Modal = ({ isOpen, onClose }) => {
   const [isAnimating, setIsAnimating] = useState(false);
+  const { login } = useContext(AuthContext);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const closeModal = () => {
@@ -11,6 +13,17 @@ const Modal = ({ isOpen, onClose }) => {
       setIsAnimating(false);
       onClose();
     }, 20);
+  };
+  const handelFromSubmit = async (e) => {
+    e.preventDefault();
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    try {
+      await login(email, password);
+      closeModal();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -43,7 +56,7 @@ const Modal = ({ isOpen, onClose }) => {
               <h2 className="text-xl  font-bold text-center mb-4">Login</h2>
               <p className="mb-4 text-center">Please login to continue.</p>
               {/* Form  */}
-              <form action="">
+              <form onSubmit={handelFromSubmit} action="">
 
                 <div className="bg-white p-4 rounded-lg">
                   <div className="relative bg-inherit">
