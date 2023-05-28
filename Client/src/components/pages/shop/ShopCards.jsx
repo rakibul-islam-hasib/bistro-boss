@@ -1,10 +1,15 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../../../providers/AuthProvider';
 import Modal from '../../Modal/Modal';
+import { useCart } from '../../../hooks/useCart';
 
 const ShopCards = ({ data = [] }) => {
-    const { user } = useContext(AuthContext); 
+    const { user } = useContext(AuthContext);
+    const [cart , refetch] = useCart();
     const onClickHandler = itm => {
+        if (cart.find(c => c._id === itm._id)) {
+            return;
+        }
         if (user && user.email) {
             const item = { ...itm, email: user.email }
             console.log(item)
@@ -16,7 +21,12 @@ const ShopCards = ({ data = [] }) => {
                 body: JSON.stringify(item)
             })
                 .then(res => res.json())
-                .then(data => console.log(data))
+                .then(data => {
+                    console.log(data)
+                    if (data.insertedId) {
+                        refetch();
+                    }
+                })
         } else {
             <Modal isOpen={true} />
         }

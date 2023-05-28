@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 import { BsFillCartCheckFill } from 'react-icons/bs'
+import { useCart } from '../../hooks/useCart';
 const navLinks = [
     {
         name: 'Home',
@@ -23,6 +24,8 @@ const navLinks = [
 const NavBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [cart] = useCart();
+    
     const { user, logout } = useContext(AuthContext);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
@@ -107,7 +110,7 @@ const NavBar = () => {
                                             <span>
                                                 <BsFillCartCheckFill className='text-2xl text-[#EEFF25]' />
                                             </span>
-                                            <span className='px-2 absolute -top-3 left-4 py-1 rounded-full bg-blue-500 text-white text-xs font-bold'>800</span>
+                                            <span className='px-2 absolute -top-3 left-4 py-1 rounded-full bg-blue-500 text-white text-xs font-bold'>{cart.length}</span>
                                         </button>
                                     </li>
                                 }
