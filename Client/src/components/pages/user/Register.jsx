@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 // import { trigger } from 'react-hook-form'; // Add this import
 import bgImg from '../../../assets/reservation/wood-grain-pattern-gray1x.png';
 import authImg from '../../../assets/others/authentication2.png';
 import { AuthContext } from '../../../providers/AuthProvider';
 import { Link } from 'react-router-dom';
+import Modal from '../../Modal/Modal';
 
 const Register = () => {
   const { signUp, user } = useContext(AuthContext);
@@ -17,12 +18,20 @@ const Register = () => {
 
   const onSubmit = (data) => {
     signUp(data.email, data.password)
-      .then((result) => {})
+      .then((result) => { })
       .catch((err) => {
         console.log(err.code);
       });
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className='min-h-screen lg:px-40 py-20' style={{ backgroundImage: `url(${bgImg})` }}>
       <div
@@ -67,17 +76,20 @@ const Register = () => {
                 <input
                   className='border-2 border-gray-400 outline-none w-full rounded-md px-2 py-1 mt-2'
                   type='password'
-                  {...register('password', { required: true, minLength: 6 })}
+                  {...register('password', { required: true, minLength: 8, pattern: /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])$/ })}
                   name='password'
                   placeholder='Password'
                   onChange={() => {
                     trigger('password');
                   }}
                 />
-                {errors.password && errors.password.type === 'required' && (
+                {errors.password?.type === 'required' && (
                   <span className='text-xs text-red-500 ml-2'>Password is required</span>
                 )}
-                {errors.password && errors.password.type === 'minLength' && (
+                {errors.password?.type === 'pattern' && (
+                  <span className='text-xs text-red-500 ml-2'>Need One uppercase one lowercase and one symbol</span>
+                )}
+                {errors.password?.type === 'minLength' && (
                   <span className='text-xs text-red-500 ml-2'>
                     Password must be at least 6 characters long
                   </span>
@@ -94,6 +106,8 @@ const Register = () => {
               </button>
             </div>
           </form>
+          <button onClick={openModal}>Open Modal</button>
+          <Modal isOpen={isModalOpen} onClose={closeModal} />
         </div>
       </div>
     </div>
