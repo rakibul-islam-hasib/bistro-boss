@@ -6,36 +6,47 @@ import OurShop from "../components/pages/shop/OurShop";
 import Login from "../components/pages/user/Login";
 import Register from "../components/pages/user/Register";
 import Dashboard from "../components/pages/dashboard/Dashboard";
+import MyCart from "../components/pages/dashboard/user/MyCart";
 
 export const router = createBrowserRouter([
     {
         path: "/",
-        element : <Main />,
-        children :[
+        element: <Main />,
+        children: [
             {
-                path : "/",
-                element : <Home />
-            }, 
-            {
-                path : "/menu",
-                element : <Menu />, 
+                path: "/",
+                element: <Home />
             },
             {
-                path : "/shop",
-                element : <OurShop />
+                path: "/menu",
+                element: <Menu />,
+            },
+            {
+                path: "/shop",
+                element: <OurShop />
             }
         ]
-    }, 
+    },
     {
-        path : "/login",
-        element : <Login />,
-    }, 
+        path: "/login",
+        element: <Login />,
+    },
     {
-        path : "/register",
-        element : <Register />,
-    }, 
+        path: "/register",
+        element: <Register />,
+    },
     {
-        path : "dashboard",
-        element : <Dashboard />,
+        path: "dashboard",
+        element: <Dashboard />,
+        children: [
+            {
+                path: "/dashboard",
+                element: <div className="border">Hii</div>
+            }, 
+            {
+                path: 'my-cart', 
+                element  : <MyCart />
+            }
+        ]
     }
 ])

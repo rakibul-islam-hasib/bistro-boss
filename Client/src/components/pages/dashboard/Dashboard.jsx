@@ -42,7 +42,7 @@ const Dashboard = () => {
 
     return (
         <div className="grid grid-cols-10">
-            <div className="col-span-2 font-Cinzel px-5 py-5 bg-[#D1A054] min-h-screen">
+            <div className="col-span-2 sticky top-0 font-Cinzel px-5 py-5 bg-[#D1A054] min-h-screen">
                 <div className="text-center mt-4">
                     <h1 className='uppercase text-2xl font-Cinzel font-bold'>Bistro BOSS</h1>
                     <p className='tracking-[0.6rem] font-Cinzel'>Restaurant</p>
@@ -61,7 +61,7 @@ const Dashboard = () => {
                     </ul>
                 </div>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-8 w-full">
                 <Outlet />
             </div>
         </div>
