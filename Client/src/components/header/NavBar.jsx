@@ -25,7 +25,7 @@ const NavBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [cart] = useCart();
-    
+
     const { user, logout } = useContext(AuthContext);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
@@ -135,15 +135,16 @@ const NavBar = () => {
                                                                     'Okk..!',
                                                                     'Your are logged out .',
                                                                     'success'
-                                                                ).catch((err) => {
-                                                                    Swal.fire(
-                                                                        'Oops!',
-                                                                        err.message,
-                                                                        'error'
-                                                                    )
-                                                                }
                                                                 )
                                                             })
+                                                            .catch((err) => {
+                                                                Swal.fire(
+                                                                    'Oops!',
+                                                                    err.message,
+                                                                    'error'
+                                                                )
+                                                            }
+                                                            )
                                                     }
                                                 })
                                             }}

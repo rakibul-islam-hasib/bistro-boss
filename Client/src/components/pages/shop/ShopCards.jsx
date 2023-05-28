@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthProvider';
 import Modal from '../../Modal/Modal';
 import { useCart } from '../../../hooks/useCart';
@@ -7,6 +7,11 @@ import { toast } from 'react-hot-toast';
 const ShopCards = ({ data = [] }) => {
     const { user } = useContext(AuthContext);
     const [cart, refetch] = useCart();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
     const onClickHandler = itm => {
         if (cart.find(c => c._id === itm._id)) {
             toast.error("Item is already added to cart")
@@ -31,10 +36,11 @@ const ShopCards = ({ data = [] }) => {
                     }
                 })
         } else {
-            <Modal isOpen={true} />
+            openModal();
         }
     }
     return (
+      <>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 ">
             {
                 data.map(item => <div key={item._id} className=" bg-white shadow rounded">
@@ -56,6 +62,8 @@ const ShopCards = ({ data = [] }) => {
                 )
             }
         </div>
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      </>
     );
 };
 

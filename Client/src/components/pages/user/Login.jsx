@@ -72,7 +72,7 @@ const Login = () => {
                                     placeholder='Captcha' />
                             </div>
                             <p className='my-2 text-[#D1A054]'>New to Bistro ?  <Link to={'/register'} className='text-orange-300'>Register</Link></p>
-                            <button type='submit' className='w-full py-3 my-4 rounded-xl font-bold bg-[#D1A054]'>Register</button>
+                            <button type='submit' className='w-full py-3 my-4 rounded-xl font-bold bg-[#D1A054]'>Login</button>
                         </div>
                     </form>
                 </div>

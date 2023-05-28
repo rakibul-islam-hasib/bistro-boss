@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 import bgImg from '../../../assets/reservation/wood-grain-pattern-gray1x.png';
 import authImg from '../../../assets/others/authentication2.png';
 import { AuthContext } from '../../../providers/AuthProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
-
 const Register = () => {
+  const navigate = useNavigate();
   const { signUp, user } = useContext(AuthContext);
   const {
     register,
@@ -17,8 +17,11 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    console.log(data , 'register data');
     signUp(data.email, data.password)
-      .then((result) => { })
+      .then((result) => {
+        navigate('/');
+      })
       .catch((err) => {
         console.log(err.code);
       });
@@ -76,9 +79,10 @@ const Register = () => {
                 <input
                   className='border-2 border-gray-400 outline-none w-full rounded-md px-2 py-1 mt-2'
                   type='password'
-                  {...register('password', { required: true, minLength: 8, 
+                  {...register('password', {
+                    required: true, minLength: 8,
                     // pattern: /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])$/
-                   })}
+                  })}
                   name='password'
                   placeholder='Password'
                   onChange={() => {
