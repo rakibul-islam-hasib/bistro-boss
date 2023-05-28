@@ -1,24 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import { useCart } from '../../../../hooks/useCart';
 import Pagination from '@mui/material/Pagination';
 import { Stack } from '@mui/material';
+import { AuthContext } from '../../../../providers/AuthProvider';
 const MyCart = () => {
-    const [cart] = useCart();
+    const { user } = useContext(AuthContext);
+    const [cart, setCart] = useState([]);
+
     const [currentPage, setCurrentPage] = useState(1);
-    const [data, setData] = useState([]);
-    console.log("🚀 ~ file: MyCart.jsx:9 ~ MyCart ~ currentPage:", currentPage)
+    const [data, setData] = useState(cart.slice(0, 5));
+    useEffect(() => {
+        if (user?.email) {
+            fetch(`http://localhost:5000/cart?email=${user?.email}`)
+            .then(res => res.json())
+            .then(data => setCart(data))
+        }
+    }, [])
     const itemPerPage = 5;
     const totalItem = cart.length;
     const pageCount = Math.ceil(totalItem / itemPerPage);
     const handelPageChange = (event, value) => {
         setCurrentPage(value);
     };
-    useEffect(()=>{
-        const start = (currentPage-1)*itemPerPage;
-        const end = currentPage*itemPerPage;
-        setData(cart.slice(start,end))
-    },[currentPage])
+    useEffect(() => {
+        const start = (currentPage - 1) * itemPerPage;
+        const end = currentPage * itemPerPage;
+        setData(prevData => cart.slice(start, end));
+    }, [currentPage , cart]);
+
+    const subTotal = cart.reduce((acc, item) => acc + item.price, 0);
+    const tax = subTotal * 0.1 || 0;
+    const shipping = subTotal * 0.2 || 0;
+    const total = subTotal + tax + shipping || 0;
     return (
         <div>
             <div className="my-8">
@@ -38,6 +52,7 @@ const MyCart = () => {
                                                 <th className="text-left font-semibold">Price</th>
                                                 <th className="text-left font-semibold">Quantity</th>
                                                 <th className="text-left font-semibold">Total</th>
+                                                <th className="text-left font-semibold">Delete</th>
                                             </tr>
                                         </thead>
                                         <tbody className="gap-7">
@@ -50,10 +65,10 @@ const MyCart = () => {
                                                                 src={item.image}
                                                                 alt="Product image"
                                                             />
-                                                            <span className="font-semibold">Product name</span>
+                                                            <span className="font-semibold">{item.name}</span>
                                                         </div>
                                                     </td>
-                                                    <td className="py-4">$19.99</td>
+                                                    <td className="py-4">${item.price}</td>
                                                     <td className="py-4">
                                                         <div className="flex items-center">
                                                             <button className="border rounded-md py-2 px-4 mr-2">-</button>
@@ -62,6 +77,11 @@ const MyCart = () => {
                                                         </div>
                                                     </td>
                                                     <td className="py-4">$19.99</td>
+                                                    <td className="py-4">
+                                                        <button className="text-red-500" onClick={() => console.dir(item._id)}>
+                                                            Delete
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -76,20 +96,20 @@ const MyCart = () => {
                                     <h2 className="text-lg font-semibold mb-4">Summary</h2>
                                     <div className="flex justify-between mb-2">
                                         <span>Subtotal</span>
-                                        <span>$19.99</span>
+                                        <span>${subTotal}</span>
                                     </div>
                                     <div className="flex justify-between mb-2">
                                         <span>Taxes</span>
-                                        <span>$1.99</span>
+                                        <span>${tax}</span>
                                     </div>
                                     <div className="flex justify-between mb-2">
                                         <span>Shipping</span>
-                                        <span>$0.00</span>
+                                        <span>${shipping}</span>
                                     </div>
                                     <hr className="my-2" />
                                     <div className="flex justify-between mb-2">
                                         <span className="font-semibold">Total</span>
-                                        <span className="font-semibold">$21.98</span>
+                                        <span className="font-semibold">${total}</span>
                                     </div>
                                     <button className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
                                 </div>
