@@ -23,10 +23,15 @@ const navLinks = [
 
 const NavBar = () => {
     const navigate = useNavigate();
+    const { user, logout } = useContext(AuthContext);
     const location = useLocation();
     const [cart] = useCart();
+    let totalItem = 0;
+    if (user?.email) {
+        totalItem = cart.length;
+    }
 
-    const { user, logout } = useContext(AuthContext);
+    
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);

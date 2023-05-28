@@ -6,6 +6,7 @@ import authImg from '../../../assets/others/authentication2.png';
 import { AuthContext } from '../../../providers/AuthProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import Modal from '../../Modal/Modal';
+import { toast } from 'react-hot-toast';
 const Register = () => {
   const navigate = useNavigate();
   const { signUp, user } = useContext(AuthContext);
@@ -20,7 +21,12 @@ const Register = () => {
     console.log(data , 'register data');
     signUp(data.email, data.password)
       .then((result) => {
-        navigate('/');
+        const user = result.user;
+        if (!user.email) {
+          toast.success('Registration successful Please Login')
+          navigate('/login');
+          
+        }
       })
       .catch((err) => {
         console.log(err.code);
