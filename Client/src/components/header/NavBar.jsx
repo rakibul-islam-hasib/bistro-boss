@@ -31,7 +31,7 @@ const NavBar = () => {
         totalItem = cart.length;
     }
 
-    
+
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -111,6 +111,13 @@ const NavBar = () => {
                                 ))}
                                 {
                                     user && <li>
+                                        <NavLink
+                                            to='/dashboard'
+                                            className={({ isActive }) => `font-bold ${isActive ? 'text-[#EEFF25]' : 'text-white'} hover:text-primary duration-300`}
+                                        >Dashboard</NavLink></li>
+                                }
+                                {
+                                    user && <li>
                                         <button className='relative'>
                                             <span>
                                                 <BsFillCartCheckFill className='text-2xl text-[#EEFF25]' />
@@ -119,6 +126,7 @@ const NavBar = () => {
                                         </button>
                                     </li>
                                 }
+
                                 {
                                     user ? <li>
                                         <span

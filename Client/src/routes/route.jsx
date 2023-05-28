@@ -5,6 +5,7 @@ import Menu from "../components/pages/menu/Menu";
 import OurShop from "../components/pages/shop/OurShop";
 import Login from "../components/pages/user/Login";
 import Register from "../components/pages/user/Register";
+import Dashboard from "../components/pages/dashboard/Dashboard";
 
 export const router = createBrowserRouter([
     {
@@ -32,5 +33,9 @@ export const router = createBrowserRouter([
     {
         path : "/register",
         element : <Register />,
+    }, 
+    {
+        path : "dashboard",
+        element : <Dashboard />,
     }
 ])
