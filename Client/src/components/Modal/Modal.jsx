@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { GiCrossMark } from 'react-icons/gi';
 const Modal = ({ isOpen, onClose }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const closeModal = () => {
     setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
       onClose();
-    }, 200);
+    }, 20);
   };
 
   return (
@@ -29,14 +30,58 @@ const Modal = ({ isOpen, onClose }) => {
             transition={{ duration: 0.2 }}
             className={`bg-white rounded-lg p-4 shadow-xl ${isAnimating ? 'pointer-events-none' : ''}`}
           >
-            <h2 className="text-xl font-bold mb-4">Modal Content</h2>
-            <p className="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <button
-              className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-              onClick={closeModal}
-            >
-              Close
-            </button>
+            <div className=" w-full relative">
+              <button
+                title='Close Popup'
+                className="bg-transparent text-black absolute top-0 right-0 rounded px-4 py-2"
+                onClick={closeModal}
+              >
+                <GiCrossMark className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="mt-4">
+              <h2 className="text-xl  font-bold text-center mb-4">Login</h2>
+              <p className="mb-4 text-center">Please login to continue.</p>
+              {/* Form  */}
+              <form action="">
+
+                <div className="bg-white p-4 rounded-lg">
+                  <div className="relative bg-inherit">
+                    <input
+                      ref={emailRef}
+                      type="text"
+                      name="email"
+                      className="peer bg-transparent h-10 w-72 rounded-lg text-black placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600" placeholder="Type inside me" />
+                    <label
+                      htmlFor="email"
+                      onClick={() => emailRef.current.focus()}
+                      className="absolute cursor-text left-1 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all">
+                      Email Address
+                    </label>
+                  </div>
+                </div>
+                <div className="bg-white p-4 rounded-lg">
+                  <div className="relative bg-inherit">
+                    <input
+                      ref={passwordRef}
+                      type="text"
+                      name="password"
+                      className="peer bg-transparent h-10 w-72 rounded-lg text-black placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600" placeholder="Type inside me" />
+                    <label
+                      htmlFor="password"
+                      onClick={() => passwordRef.current.focus()}
+                      className="absolute cursor-text left-1 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all">
+                      Password
+                    </label>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <button className='px-7 py-2 bg-blue-500 font-bold text-white rounded-md' type='submit'>Login</button>
+                </div>
+              </form>
+
+            </div>
+
           </motion.div>
         </motion.div>
       )}

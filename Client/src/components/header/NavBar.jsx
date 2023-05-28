@@ -1,7 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars } from 'react-icons/fa';
+import Swal from 'sweetalert2'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../providers/AuthProvider';
+import { BsFillCartCheckFill } from 'react-icons/bs'
 const navLinks = [
     {
         name: 'Home',
@@ -14,16 +17,13 @@ const navLinks = [
     {
         name: 'Our Shop',
         route: '/shop'
-    }, 
-    {
-        name: 'Login',
-        route: '/login'
-    },
+    }
 ];
 
 const NavBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user, logout } = useContext(AuthContext);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -39,23 +39,23 @@ const NavBar = () => {
     };
     useEffect(() => {
         const handleScroll = () => {
-          const currentPosition = window.pageYOffset;
-          setScrollPosition(currentPosition);
+            const currentPosition = window.pageYOffset;
+            setScrollPosition(currentPosition);
         };
-    
+
         window.addEventListener('scroll', handleScroll);
         return () => {
-          window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('scroll', handleScroll);
         };
-      }, []);
-    
-      useEffect(() => {
+    }, []);
+
+    useEffect(() => {
         if (scrollPosition > 1000) {
-          setNavBg('bg-black');
+            setNavBg('bg-black');
         } else {
-          setNavBg('bg-[#15151580]');
+            setNavBg('bg-[#15151580]');
         }
-      }, [scrollPosition]);
+    }, [scrollPosition]);
 
     return (
         <motion.nav
@@ -101,6 +101,55 @@ const NavBar = () => {
                                         </NavLink>
                                     </li>
                                 ))}
+                                {
+                                    user && <li>
+                                        <button className='relative'>
+                                            <span>
+                                                <BsFillCartCheckFill className='text-2xl text-[#EEFF25]' />
+                                            </span>
+                                            <span className='px-2 absolute -top-3 left-4 py-1 rounded-full bg-blue-500 text-white text-xs font-bold'>800</span>
+                                        </button>
+                                    </li>
+                                }
+                                {
+                                    user ? <li>
+                                        <span
+                                            className={` cursor-pointer  text-white font-bold hover:text-primary duration-300`}
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "You won't be able to revert this!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, delete it!'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        logout()
+                                                            .then(() => {
+                                                                Swal.fire(
+                                                                    'Okk..!',
+                                                                    'Your are logged out .',
+                                                                    'success'
+                                                                ).catch((err) => {
+                                                                    Swal.fire(
+                                                                        'Oops!',
+                                                                        err.message,
+                                                                        'error'
+                                                                    )
+                                                                }
+                                                                )
+                                                            })
+                                                    }
+                                                })
+                                            }}
+                                        >Log Out</span></li> : <li>
+                                        <NavLink
+                                            to={isLogin ? '/register' : '/login'}
+                                            className={({ isActive }) => `font-bold ${isActive ? 'text-[#EEFF25]' : 'text-white'} hover:text-primary duration-300`}
+                                        >{isLogin ? '/register' : 'Login'}</NavLink></li>
+                                }
 
                             </ul>
 

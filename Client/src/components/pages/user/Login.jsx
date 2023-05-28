@@ -10,19 +10,20 @@ const Login = () => {
         e.preventDefault()
         const fromData = new FormData(e.target)
         const data = Object.fromEntries(fromData)
-        console.log(data)
+        // console.log(data)
+        login(data.email, data.password)
+        .then(result => { })
+        .catch(err => {
+            console.log(err.code)
+        })
         const user_captcha = data.captcha;
-        if (validateCaptcha(user_captcha)) {
-            login(data.email, data.password)
-                .then(result => { })
-                .catch(err => {
-                    console.log(err.code)
-                })
-        }
-        else {
-            alert('Captcha Does Not Matched')
-            return;
-        }
+        // if (validateCaptcha(user_captcha)) {
+           
+        // }
+        // else {
+        //     alert('Captcha Does Not Matched')
+        //     return;
+        // }
     }
 
 
@@ -56,7 +57,7 @@ const Login = () => {
                                     type="password"
                                     required
                                     name='password'
-                                    placeholder='Name' />
+                                    placeholder='Password' />
                             </div>
                             <div className="w-full my-2">
                                 <LoadCanvasTemplate />
@@ -66,7 +67,7 @@ const Login = () => {
                                 <input
                                     className='border-2 border-gray-400 outline-none w-full rounded-md px-2 py-1 mt-2'
                                     type="text"
-                                    required
+                                    // required
                                     name='captcha'
                                     placeholder='Captcha' />
                             </div>

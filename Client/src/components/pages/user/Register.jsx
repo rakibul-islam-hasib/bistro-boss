@@ -76,7 +76,9 @@ const Register = () => {
                 <input
                   className='border-2 border-gray-400 outline-none w-full rounded-md px-2 py-1 mt-2'
                   type='password'
-                  {...register('password', { required: true, minLength: 8, pattern: /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])$/ })}
+                  {...register('password', { required: true, minLength: 8, 
+                    // pattern: /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])$/
+                   })}
                   name='password'
                   placeholder='Password'
                   onChange={() => {
@@ -86,9 +88,9 @@ const Register = () => {
                 {errors.password?.type === 'required' && (
                   <span className='text-xs text-red-500 ml-2'>Password is required</span>
                 )}
-                {errors.password?.type === 'pattern' && (
+                {/* {errors.password?.type === 'pattern' && (
                   <span className='text-xs text-red-500 ml-2'>Need One uppercase one lowercase and one symbol</span>
-                )}
+                )} */}
                 {errors.password?.type === 'minLength' && (
                   <span className='text-xs text-red-500 ml-2'>
                     Password must be at least 6 characters long
