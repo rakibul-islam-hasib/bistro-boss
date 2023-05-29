@@ -18,6 +18,7 @@ const Users = () => {
             method: 'PATCH'
         })
             .then(res => res.json())
+            
             .then(data => {
                 if (data.modifiedCount > 0) {
                     toast.success(`${user.name} is now admin}`);
