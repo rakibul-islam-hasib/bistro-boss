@@ -3,7 +3,8 @@ import React from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import { FaUserAlt } from 'react-icons/fa';
 import { BsTrash } from 'react-icons/bs';
-
+import { RiAdminFill } from 'react-icons/ri';
+import { toast } from 'react-hot-toast';
 const Users = () => {
     const { data: users = [], refetch } = useQuery({
         queryKey: ['users'], queryFn: async () => {
@@ -12,6 +13,18 @@ const Users = () => {
             return data;
         }
     })
+    const handelAddAdmin = user => {
+        fetch(`http://localhost:5000/users/mk-admin/${user._id}`, {
+            method: 'PATCH'
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount > 0) {
+                    toast.success(`${user.name} is now admin}`);
+                    refetch();
+                }
+            })
+    }
     console.log(users)
     return (
         <>
@@ -39,7 +52,17 @@ const Users = () => {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{user.name}</td>
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{user.email}</td>
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"><div className='px-3 text-xl py-2 w-fit rounded-lg cursor-pointer bg-[#D1A054]'><FaUserAlt /></div></td>
+                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                {
+                                                    user.role === 'admin' ? <div
+                                                        className='px-3 text-xl py-2 w-fit rounded-lg cursor-pointer bg-[#D1A054]'>
+                                                        <RiAdminFill />
+                                                    </div> : <div onClick={()=>handelAddAdmin(user)} className='px-3 text-xl py-2 w-fit rounded-lg cursor-pointer bg-[#D1A054]'>
+                                                        <FaUserAlt />
+                                                    </div>
+                                                }
+                                            </td>
+
                                             <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                 <div className='px-3 py-2 w-fit rounded-lg cursor-pointer text-xl bg-red-400 text-white'><BsTrash /></div>
                                             </td>

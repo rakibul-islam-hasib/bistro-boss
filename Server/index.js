@@ -85,7 +85,14 @@ async function run() {
             const result = await usersCollection.find().toArray();
             res.send(result);
         });
-
+        app.patch('/users/mk-admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await usersCollection.updateOne(query, {
+                $set: { role : 'admin' }
+            });
+            res.send(result);
+        });
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
