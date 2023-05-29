@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { AiFillHome, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BsFillCalendarCheckFill } from 'react-icons/bs';
-import { FaSwatchbook } from 'react-icons/fa';
+import { FaSwatchbook, FaUsers } from 'react-icons/fa';
 import { ImSpoonKnife } from 'react-icons/im';
 import { TbStarsFilled } from 'react-icons/tb';
+import { TfiMenuAlt } from 'react-icons/tfi';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../providers/AuthProvider';
 
@@ -18,8 +19,8 @@ const Dashboard = () => {
             </div>
         );
     }
-
-    const menuItems = [
+    const isAdmin = true;
+    const userMenuItems = [
         {
             icon: <AiFillHome className="text-2xl" />,
             text: 'Home',
@@ -51,7 +52,33 @@ const Dashboard = () => {
             to: '/dashboard/my-bookings'
         },
     ];
-
+    const adminNavItems = [
+        {
+            icon: <AiFillHome className="text-2xl" />,
+            text: 'Home',
+            to: '/dashboard'
+        },
+        {
+            icon: <BsFillCalendarCheckFill className="text-2xl" />,
+            text: 'Reservation',
+            to: '/dashboard/reservation'
+        },
+        {
+            icon: <ImSpoonKnife className="text-2xl" />,
+            text: 'Add Item',
+            to: '/dashboard/add-item'
+        },
+        {
+            icon: <TfiMenuAlt className="text-2xl" />,
+            text: 'Manage Items',
+            to: '/dashboard/manage-items'
+        }, 
+        {
+            icon: <FaUsers className="text-2xl" />,
+            text: 'Manage Users',
+            to: '/dashboard/users'
+        },
+    ]
     return (
         <div className="grid bg-[#F6F6F6] grid-cols-10">
             <div className="col-span-2 hidden md:block top-0 font-Cinzel px-5 py-5 bg-[#D1A054] min-h-screen">
@@ -61,15 +88,25 @@ const Dashboard = () => {
                 </div>
                 <div className="mt-6 px-5">
                     <ul>
-                        {menuItems.map((item, index) => (
-                            <li key={index} className="mt-4">
-                                <NavLink to={item.to}>
-                                    <span className="inline-flex w-full whitespace-nowrap uppercase items-center text-base gap-4">
-                                        {item.icon} {item.text}
-                                    </span>
-                                </NavLink>
-                            </li>
-                        ))}
+                        {
+                            isAdmin ? adminNavItems.map((item, index) => (
+                                <li key={index} className="mt-4">
+                                    <NavLink to={item.to}>
+                                        <span className="inline-flex w-full whitespace-nowrap uppercase items-center text-base gap-4">
+                                            {item.icon} {item.text}
+                                        </span>
+                                    </NavLink>
+                                </li>
+                            )) : userMenuItems.map((item, index) => (
+                                <li key={index} className="mt-4">
+                                    <NavLink to={item.to}>
+                                        <span className="inline-flex w-full whitespace-nowrap uppercase items-center text-base gap-4">
+                                            {item.icon} {item.text}
+                                        </span>
+                                    </NavLink>
+                                </li>
+                            ))
+                        }
                     </ul>
                 </div>
             </div>

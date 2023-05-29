@@ -3,16 +3,19 @@ import bgImg from '../../../assets/reservation/wood-grain-pattern-gray1x.png'
 import authImg from '../../../assets/others/authentication2.png'
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../../providers/AuthProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const Login = () => {
     const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
     const handelFormSubmit = e => {
         e.preventDefault()
         const fromData = new FormData(e.target)
         const data = Object.fromEntries(fromData)
         // console.log(data)
         login(data.email, data.password)
-        .then(result => { })
+        .then(result => { 
+            navigate('/dashboard')
+        })
         .catch(err => {
             console.log(err.code)
         })
