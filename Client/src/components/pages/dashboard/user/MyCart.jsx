@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
-import { useCart } from '../../../../hooks/useCart';
+import Swal from 'sweetalert2';
 import Pagination from '@mui/material/Pagination';
 import { Stack } from '@mui/material';
 import { AuthContext } from '../../../../providers/AuthProvider';
@@ -13,8 +13,8 @@ const MyCart = () => {
     useEffect(() => {
         if (user?.email) {
             fetch(`http://localhost:5000/cart?email=${user?.email}`)
-            .then(res => res.json())
-            .then(data => setCart(data))
+                .then(res => res.json())
+                .then(data => setCart(data))
         }
     }, [])
     const itemPerPage = 5;
@@ -27,11 +27,43 @@ const MyCart = () => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(prevData => cart.slice(start, end));
-    }, [currentPage , cart]);
+    }, [currentPage, cart]);
+
+    let handelDelete = id => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:5000/cart/${id}`, {
+                    method: 'DELETE',
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.deletedCount > 0) {
+                            const remainingCart = cart.filter(item => item._id !== id);
+                            setCart(remainingCart);
+                            Swal.fire(
+                                'Deleted!',
+                                'Your item has been deleted.',
+                                'success'
+                            )
+                        }
+                    })
+            }
+        })
+
+
+    }
 
     const subTotal = cart.reduce((acc, item) => acc + item.price, 0);
-    const tax = subTotal * 0.1 || 0;
-    const shipping = subTotal * 0.2 || 0;
+    const tax = Math.round(subTotal * 0.1) || 0;
+    const shipping = Math.round(subTotal * 0.2) || 0;
     const total = subTotal + tax + shipping || 0;
     return (
         <div>
@@ -41,7 +73,7 @@ const MyCart = () => {
             <div className="">
                 <div className="  py-8">
                     <div className="container mx-auto px-4">
-                        <h1 className="text-2xl font-semibold mb-4">Shopping Cart</h1>
+                        <h1 className="text-2xl font-semibold mb-4">Total item : {cart.length}</h1>
                         <div className="flex flex-col md:flex-row gap-4">
                             <div className="md:w-3/4">
                                 <div className="bg-white rounded-lg shadow-md p-6 mb-4">
@@ -78,7 +110,7 @@ const MyCart = () => {
                                                     </td>
                                                     <td className="py-4">$19.99</td>
                                                     <td className="py-4">
-                                                        <button className="text-red-500" onClick={() => console.dir(item._id)}>
+                                                        <button className="text-red-500" onClick={() => handelDelete(item._id)}>
                                                             Delete
                                                         </button>
                                                     </td>
@@ -91,7 +123,7 @@ const MyCart = () => {
                                     <Pagination onChange={handelPageChange} count={pageCount} color="primary" />
                                 </Stack>
                             </div>
-                            <div className="md:w-1/4">
+                            <div className="md:w-1/5 md:fixed right-0">
                                 <div className="bg-white rounded-lg shadow-md p-6">
                                     <h2 className="text-lg font-semibold mb-4">Summary</h2>
                                     <div className="flex justify-between mb-2">
@@ -118,6 +150,7 @@ const MyCart = () => {
                     </div>
                 </div>
             </div>
+            
         </div>
     );
 };

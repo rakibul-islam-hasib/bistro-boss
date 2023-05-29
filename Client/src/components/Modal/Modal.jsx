@@ -1,10 +1,11 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GiCrossMark } from 'react-icons/gi';
 import { AuthContext } from '../../providers/AuthProvider';
 const Modal = ({ isOpen, onClose }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const { login } = useContext(AuthContext);
+  // const [loader, setLoader] = useState(false);
+  const { login  , loader} = useContext(AuthContext);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const closeModal = () => {
@@ -15,16 +16,26 @@ const Modal = ({ isOpen, onClose }) => {
     }, 20);
   };
   const handelFromSubmit = async (e) => {
+    // setLoader(true);
     e.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     try {
       await login(email, password);
-      closeModal();
+      // setLoader(false);
+      closeModal()
     } catch (error) {
-      console.log(error);
+      // setLoader(false);
+      console.log(error.code);
     }
   };
+  console.log(loader)
+  if (loader) {
+    return <div className="h-screen w-screen flex justify-center items-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>
+  }
+
 
   return (
     <AnimatePresence>
@@ -49,7 +60,7 @@ const Modal = ({ isOpen, onClose }) => {
                 className="bg-transparent text-black absolute top-0 right-0 rounded px-4 py-2"
                 onClick={closeModal}
               >
-                <GiCrossMark className="w-6 h-6" />
+                <GiCrossMark className="w-6 text-red-500 h-6" />
               </button>
             </div>
             <div className="mt-4">
@@ -63,6 +74,7 @@ const Modal = ({ isOpen, onClose }) => {
                     <input
                       ref={emailRef}
                       type="text"
+                      required
                       name="email"
                       className="peer bg-transparent h-10 w-72 rounded-lg text-black placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600" placeholder="Type inside me" />
                     <label
@@ -77,8 +89,9 @@ const Modal = ({ isOpen, onClose }) => {
                   <div className="relative bg-inherit">
                     <input
                       ref={passwordRef}
-                      type="text"
+                      type="password"
                       name="password"
+                      required
                       className="peer bg-transparent h-10 w-72 rounded-lg text-black placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600" placeholder="Type inside me" />
                     <label
                       htmlFor="password"
