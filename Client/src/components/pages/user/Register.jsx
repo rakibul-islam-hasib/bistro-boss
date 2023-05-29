@@ -9,7 +9,11 @@ import Modal from '../../Modal/Modal';
 import { toast } from 'react-hot-toast';
 const Register = () => {
   const navigate = useNavigate();
-  const { signUp, user } = useContext(AuthContext);
+  const { signUp, user, updateUser } = useContext(AuthContext);
+  console.log("🚀 ~ file: Register.jsx:13 ~ Register ~ user:", user)
+  if (user?.email) {
+    navigate('/');
+  }
   const {
     register,
     handleSubmit,
@@ -18,19 +22,36 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data , 'register data');
+    console.log(data, 'register data');
     signUp(data.email, data.password)
-      .then((result) => {
-        const user = result.user;
-        if (!user.email) {
-          toast.success('Registration successful Please Login')
-          navigate('/login');
-          
-        }
+      .then(result => {
+        updateUser(data.name)
+          .then(() => {
+            if (result.user.displayName) {
+              fetch('http://localhost:5000/users' , {
+                method : 'POST',
+                headers : {
+                  'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({name : data.name , email : data.email , role : 'user'})
+              })
+              .then(res => res.json())
+              .then(data => {
+                if(data.insertedId){
+                  toast.success('Register Successfully');
+                  navigate('/');
+                }
+              })
+            }
+          })
       })
-      .catch((err) => {
-        console.log(err.code);
-      });
+      .catch(error => {
+        toast.error(error.code);
+        // toast.error(error.code);
+        console.log(error.code, 'error code')
+      })
+
+
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -33,6 +33,7 @@ async function run() {
         const menuCollection = database.collection("menu");
         const reviewsCollection = database.collection("reviews");
         const cartCollection = database.collection("cart");
+        const usersCollection = database.collection("users");
 
         // Get the database and server versions
         app.get('/menu', async (req, res) => {
@@ -70,6 +71,17 @@ async function run() {
             const result = await cartCollection.deleteOne(query);
             res.send(result);
         });
+        
+        
+        // Post user data
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
+
+
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
