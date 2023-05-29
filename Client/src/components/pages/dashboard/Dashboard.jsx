@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AiFillHome, AiOutlineShoppingCart } from 'react-icons/ai';
-import { BsFillCalendarCheckFill } from 'react-icons/bs';
+import { BsFillCalendarCheckFill, BsJournalBookmarkFill } from 'react-icons/bs';
 import { FaSwatchbook, FaUsers } from 'react-icons/fa';
 import { ImSpoonKnife } from 'react-icons/im';
 import { TbStarsFilled } from 'react-icons/tb';
@@ -77,6 +77,11 @@ const Dashboard = () => {
             icon: <FaUsers className="text-2xl" />,
             text: 'Manage Users',
             to: '/dashboard/users'
+        },
+        {
+            icon: <BsJournalBookmarkFill className="text-2xl" />,
+            text: 'Manage Bookings',
+            to: '/dashboard/admin-  bookings'
         },
     ]
     return (
