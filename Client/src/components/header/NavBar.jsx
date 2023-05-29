@@ -118,7 +118,7 @@ const NavBar = () => {
                                 }
                                 {
                                     user && <li>
-                                        <button className='relative'>
+                                        <button onClick={()=>navigate('/dashboard/my-cart')} className='relative'>
                                             <span>
                                                 <BsFillCartCheckFill className='text-2xl text-[#EEFF25]' />
                                             </span>
