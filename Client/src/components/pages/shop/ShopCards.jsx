@@ -6,14 +6,18 @@ import { toast } from 'react-hot-toast';
 
 const ShopCards = ({ data = [] }) => {
     const { user } = useContext(AuthContext);
-    const [cart, refetch] = useCart();
+    const [carts, refetch] = useCart();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [carts, setCarts] = useState([])
-    useEffect(() => {
-        fetch(`http://localhost:5000/cart?email=${user?.email}`)
+    const [cart, setCarts] = useState([])
+  /*   useEffect(() => {
+        fetch(`http://localhost:5000/cart?email=${user?.email}`, {
+            headers : {
+                authorization : `bearer ${localStorage.getItem('token')}`
+            }
+        })
             .then(res => res.json())
             .then(data => setCarts(data))
-    }, [])
+    }, []) */
     const openModal = () => {
         setIsModalOpen(true);
     };

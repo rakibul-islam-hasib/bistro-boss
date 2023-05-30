@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
 import { app } from '../config/firebase/firebase.config';
-
+import axios from 'axios';
 
 export const AuthContext = createContext(null)
 const AuthProvider = ({ children }) => {
@@ -45,6 +45,16 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             setUser(user);
             setLoader(false);
+            if (user) {
+                axios.post('http://localhost:5000/user/set-token', { email: user.email, name: user.displayName })
+                .then(data => { 
+                    console.log(data.data.token)
+                    localStorage.setItem('token', data.data.token)
+                })
+            }
+            else { 
+                localStorage.removeItem('token')
+            }
         });
         return () => unsubscribe();
     }, [])

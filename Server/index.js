@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -8,6 +9,22 @@ const cors = require('cors');
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Verify token
+const verifyJWT = (req, res, next) => {
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+         return res.status(401).send({ error: true, message: 'Unauthorize access' })
+    }
+    const token = authorization?.split(' ')[1]
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(403).send({ error: true, message: 'forbidden user or token has expired' })
+        }
+        req.decoded = decoded;
+        next()
+    })
+}
 
 
 // Routes
@@ -34,6 +51,7 @@ async function run() {
         const reviewsCollection = database.collection("reviews");
         const cartCollection = database.collection("cart");
         const usersCollection = database.collection("users");
+       
 
         // Get the database and server versions
         app.get('/menu', async (req, res) => {
@@ -53,10 +71,16 @@ async function run() {
             const result = await cartCollection.insertOne(cart);
             res.send(result);
         });
-        app.get('/cart', async (req, res) => {
+        app.get('/cart',verifyJWT,async (req, res) => {
+            // console.log(req)
             const email = req.query.email;
+            const decodedEmail = req.decoded.email ; 
+            if (email !== decodedEmail) {
+              return res.status(401).send({error : true , message : 'unauthorize token'})
+            }
             const cursor = cartCollection.find({ email: email });
             const cart = await cursor.toArray();
+            // console.log("🚀 ~ file: index.js:85 ~ app.get ~ cart:", cart)
             res.send(cart);
         });
         app.get('/carts', async (req, res) => {
@@ -71,8 +95,8 @@ async function run() {
             const result = await cartCollection.deleteOne(query);
             res.send(result);
         });
-        
-        
+
+
         // Post user data
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -90,14 +114,23 @@ async function run() {
             const query = { _id: new ObjectId(id) };
             const matched = await usersCollection.findOne(query);
             if (matched) {
-                res.send({message : 'User already an admin'});
+                res.send({ message: 'User already an admin' });
                 return;
             }
             const result = await usersCollection.updateOne(query, {
-                $set: { role : 'admin' }
+                $set: { role: 'admin' }
             });
             res.send(result);
         });
+
+
+        // JSON web token 
+        app.post('/user/set-token', (req, res) => {
+            const user = req.body;
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1 })
+            res.send({ token })
+        })
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });

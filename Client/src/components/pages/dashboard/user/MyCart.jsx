@@ -4,19 +4,25 @@ import Swal from 'sweetalert2';
 import Pagination from '@mui/material/Pagination';
 import { Stack } from '@mui/material';
 import { AuthContext } from '../../../../providers/AuthProvider';
+import { useCart } from '../../../../hooks/useCart';
 const MyCart = () => {
     const { user } = useContext(AuthContext);
-    const [cart, setCart] = useState([]);
+    const [cart , refetch] = useCart()
+    // const [cart, setCart] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(cart.slice(0, 5));
-    useEffect(() => {
+    /* useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:5000/cart?email=${user?.email}`)
+            fetch(`http://localhost:5000/cart?email=${user?.email}` , { 
+                headers : { 
+                    authorization : `bearer ${localStorage.getItem('token')}`
+                }
+            })
                 .then(res => res.json())
                 .then(data => setCart(data))
         }
-    }, [])
+    }, []) */
     const itemPerPage = 5;
     const totalItem = cart.length;
     const pageCount = Math.ceil(totalItem / itemPerPage);
@@ -46,8 +52,7 @@ const MyCart = () => {
                     .then(res => res.json())
                     .then(data => {
                         if (data.deletedCount > 0) {
-                            const remainingCart = cart.filter(item => item._id !== id);
-                            setCart(remainingCart);
+                            refetch()   
                             Swal.fire(
                                 'Deleted!',
                                 'Your item has been deleted.',
