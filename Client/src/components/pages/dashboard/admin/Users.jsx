@@ -4,7 +4,7 @@ import SectionTitle from '../../../shared/SectionTitle';
 import { FaUserAlt } from 'react-icons/fa';
 import { BsTrash } from 'react-icons/bs';
 import { RiAdminFill } from 'react-icons/ri';
-import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2'
 const Users = () => {
     const { data: users = [], refetch } = useQuery({
         queryKey: ['users'], queryFn: async () => {
@@ -20,8 +20,13 @@ const Users = () => {
             .then(res => res.json())
             
             .then(data => {
+                console.log(data)
                 if (data.modifiedCount > 0) {
-                    toast.success(`${user.name} is now admin}`);
+                    Swal.fire(
+                        'Good job!',
+                        `${user.name} is now an admin`,
+                        'success'
+                      );
                     refetch();
                 }
             })

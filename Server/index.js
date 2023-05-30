@@ -88,6 +88,11 @@ async function run() {
         app.patch('/users/mk-admin/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
+            const matched = await usersCollection.findOne(query);
+            if (matched) {
+                res.send({message : 'User already an admin'});
+                return;
+            }
             const result = await usersCollection.updateOne(query, {
                 $set: { role : 'admin' }
             });
