@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AiFillHome, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BsFillCalendarCheckFill, BsJournalBookmarkFill } from 'react-icons/bs';
 import { FaSwatchbook, FaUsers } from 'react-icons/fa';
@@ -7,11 +7,24 @@ import { TbStarsFilled } from 'react-icons/tb';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../providers/AuthProvider';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { loader } = useContext(AuthContext);
+    const { loader , user} = useContext(AuthContext);
+    const [isAdmin, setIsAdmin] = useState(false);
+    console.log("🚀 ~ file: Dashboard.jsx:16 ~ Dashboard ~ isAdmin:", isAdmin)
     const navigate = useNavigate();
+
+    const axiosSecure = useAxiosSecure();
+    useEffect(()=>{
+        const checkAdmin = async () => {
+            const res = await axiosSecure.get(`/user/id-admin/${user?.email}`);
+            setIsAdmin(res.data.isAdmin);
+        }
+        checkAdmin();
+    },[])
+
     if (loader) {
         return (
             <div className="h-screen w-screen flex justify-center items-center">
@@ -19,7 +32,7 @@ const Dashboard = () => {
             </div>
         );
     }
-    const isAdmin = true;
+    // const isAdmin = true;
     const userMenuItems = [
         {
             icon: <AiFillHome className="text-2xl" />,
@@ -72,7 +85,7 @@ const Dashboard = () => {
             icon: <TfiMenuAlt className="text-2xl" />,
             text: 'Manage Items',
             to: '/dashboard/manage-items'
-        }, 
+        },
         {
             icon: <FaUsers className="text-2xl" />,
             text: 'Manage Users',

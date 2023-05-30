@@ -14,7 +14,7 @@ app.use(express.json());
 const verifyJWT = (req, res, next) => {
     const authorization = req.headers.authorization;
     if (!authorization) {
-         return res.status(401).send({ error: true, message: 'Unauthorize access' })
+        return res.status(401).send({ error: true, message: 'Unauthorize access' })
     }
     const token = authorization?.split(' ')[1]
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
@@ -51,7 +51,7 @@ async function run() {
         const reviewsCollection = database.collection("reviews");
         const cartCollection = database.collection("cart");
         const usersCollection = database.collection("users");
-       
+
 
         // Get the database and server versions
         app.get('/menu', async (req, res) => {
@@ -71,12 +71,12 @@ async function run() {
             const result = await cartCollection.insertOne(cart);
             res.send(result);
         });
-        app.get('/cart',verifyJWT,async (req, res) => {
+        app.get('/cart', verifyJWT, async (req, res) => {
             // console.log(req)
             const email = req.query.email;
-            const decodedEmail = req.decoded.email ; 
+            const decodedEmail = req.decoded.email;
             if (email !== decodedEmail) {
-              return res.status(401).send({error : true , message : 'unauthorize token'})
+                return res.status(401).send({ error: true, message: 'unauthorize token' })
             }
             const cursor = cartCollection.find({ email: email });
             const cart = await cursor.toArray();
@@ -88,6 +88,7 @@ async function run() {
             const carts = await cursor.toArray();
             res.send(carts);
         });
+
         // Delete cart data
         app.delete('/cart/:id', async (req, res) => {
             const id = req.params.id;
@@ -109,6 +110,21 @@ async function run() {
             const result = await usersCollection.find().toArray();
             res.send(result);
         });
+
+        // is admin  or not
+        app.get('/user/id-admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const matched = await usersCollection.findOne(query);
+            if (matched) {
+                res.send({ isAdmin: matched.role === 'admin' });
+                return;
+            }
+            res.send({ isAdmin: false });
+        })
+
+
+
         app.patch('/users/mk-admin/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -127,7 +143,7 @@ async function run() {
         // JSON web token 
         app.post('/user/set-token', (req, res) => {
             const user = req.body;
-            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1 })
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '12h' })
             res.send({ token })
         })
 
