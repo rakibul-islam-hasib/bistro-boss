@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import { useMenu } from '../../../../hooks/useMenu';
 import { Pagination, Stack } from '@mui/material';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 
 const ManageItem = () => {
     const [menu] = useMenu();
-
+    const axiosSecure = useAxiosSecure(); 
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(menu.slice(0, 5));
     const itemPerPage = 8;
@@ -19,8 +20,10 @@ const ManageItem = () => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(menu.slice(start, end));
-    }, [currentPage, menu]);
-
+    }, [currentPage, menu , pageCount, itemPerPage , totalItem ]);
+    const handelDelete = id => {
+        
+    }
     return (
         <div>
             <div className="my-10">
@@ -53,7 +56,7 @@ const ManageItem = () => {
                                         <span className="bg-[#D1A054] text-white py-1 px-2 rounded-full text-xs">Update</span>
                                     </td>
                                     <td className="py-4 px-6 border-b border-gray-200">
-                                        <span className="bg-green-500 text-white py-1 px-2 rounded-full text-xs">Delete</span>
+                                        <span onClick={() => handelDelete(`${item._id}`)} className="bg-green-500 cursor-pointer text-white py-1 px-2 rounded-full text-xs">Delete</span>
                                     </td>
                                 </tr>
                             );
