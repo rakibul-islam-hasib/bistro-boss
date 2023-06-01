@@ -11,26 +11,25 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { loader , user} = useContext(AuthContext);
+    const { loader, user } = useContext(AuthContext);
+    console.log("🚀 ~ file: Dashboard.jsx:15 ~ Dashboard ~ loader:", loader)
     const [isAdmin, setIsAdmin] = useState(false);
-    console.log("🚀 ~ file: Dashboard.jsx:16 ~ Dashboard ~ isAdmin:", isAdmin)
+    // console.log("🚀 ~ file: Dashboard.jsx:16 ~ Dashboard ~ isAdmin:", isAdmin)
     const navigate = useNavigate();
 
     const axiosSecure = useAxiosSecure();
-    useEffect(()=>{
+    useEffect(() => {
         const checkAdmin = async () => {
             const res = await axiosSecure.get(`/user/id-admin/${user?.email}`);
             setIsAdmin(res.data.isAdmin);
         }
         checkAdmin();
-    },[])
+    }, [])
 
     if (loader) {
-        return (
-            <div className="h-screen w-screen flex justify-center items-center">
-                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-            </div>
-        );
+        return <div className="h-screen w-screen flex justify-center items-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
     }
     // const isAdmin = true;
     const userMenuItems = [

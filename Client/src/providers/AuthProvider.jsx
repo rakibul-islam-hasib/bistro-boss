@@ -33,9 +33,9 @@ const AuthProvider = ({ children }) => {
     }
     const updateUser = async (displayName) => {
         try {
-             await updateProfile(auth.currentUser , {displayName : displayName})
-             setUser(auth.currentUser)
-             
+            await updateProfile(auth.currentUser, { displayName: displayName })
+            setUser(auth.currentUser)
+
         } catch (error) {
             throw error
         }
@@ -44,21 +44,22 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             setUser(user);
-            setLoader(false);
             if (user) {
                 axios.post('http://localhost:5000/user/set-token', { email: user.email, name: user.displayName })
-                .then(data => { 
-                    console.log(data.data.token)
-                    localStorage.setItem('token', data.data.token)
-                })
-            }
-            else { 
+                    .then(data => {
+                        // console.log(data.data.token)
+                        localStorage.setItem('token', data.data.token)
+                    })
+                    setLoader(false);
+                }
+            else {
                 localStorage.removeItem('token')
+                setLoader(false);
             }
         });
         return () => unsubscribe();
     }, [])
-    const contextVale = { user, loader, setLoader, signUp, login, logout  , updateUser}
+    const contextVale = { user, loader, setLoader, signUp, login, logout, updateUser }
     return (
         <AuthContext.Provider value={contextVale}>
             {children}

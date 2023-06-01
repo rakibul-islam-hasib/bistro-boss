@@ -5,12 +5,13 @@ import { FaUserAlt } from 'react-icons/fa';
 import { BsTrash } from 'react-icons/bs';
 import { RiAdminFill } from 'react-icons/ri';
 import Swal from 'sweetalert2'
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 const Users = () => {
+    const axiosSecure  = useAxiosSecure();
     const { data: users = [], refetch } = useQuery({
         queryKey: ['users'], queryFn: async () => {
-            const result = await fetch('http://localhost:5000/users');
-            const data = await result.json();
-            return data;
+            const result = await axiosSecure.get('/users');
+            return result.data;
         }
     })
     const handelAddAdmin = user => {
@@ -18,7 +19,7 @@ const Users = () => {
             method: 'PATCH'
         })
             .then(res => res.json())
-            
+
             .then(data => {
                 console.log(data)
                 if (data.modifiedCount > 0) {
@@ -26,7 +27,7 @@ const Users = () => {
                         'Good job!',
                         `${user.name} is now an admin`,
                         'success'
-                      );
+                    );
                     refetch();
                 }
             })
@@ -63,7 +64,7 @@ const Users = () => {
                                                     user.role === 'admin' ? <div
                                                         className='px-3 text-xl py-2 w-fit rounded-lg cursor-pointer bg-[#D1A054]'>
                                                         <RiAdminFill />
-                                                    </div> : <div onClick={()=>handelAddAdmin(user)} className='px-3 text-xl py-2 w-fit rounded-lg cursor-pointer bg-[#D1A054]'>
+                                                    </div> : <div onClick={() => handelAddAdmin(user)} className='px-3 text-xl py-2 w-fit rounded-lg cursor-pointer bg-[#D1A054]'>
                                                         <FaUserAlt />
                                                     </div>
                                                 }

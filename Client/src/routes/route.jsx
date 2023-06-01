@@ -8,6 +8,7 @@ import Register from "../components/pages/user/Register";
 import Dashboard from "../components/pages/dashboard/Dashboard";
 import MyCart from "../components/pages/dashboard/user/MyCart";
 import Users from "../components/pages/dashboard/admin/Users";
+import AddItem from "../components/pages/dashboard/admin/AddItem";
 
 export const router = createBrowserRouter([
     {
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
             {
                 path: 'users', 
                 element : <Users />
+            },
+            {
+                path : 'add-item', 
+                element : <AddItem />
             }
         ]
     }
