@@ -8,25 +8,15 @@ import { TfiMenuAlt } from 'react-icons/tfi';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../providers/AuthProvider';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { useAdmin } from '../../../hooks/useAdmin';
 
 const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { loader, user } = useContext(AuthContext);
-    console.log("🚀 ~ file: Dashboard.jsx:15 ~ Dashboard ~ loader:", loader)
-    const [isAdmin, setIsAdmin] = useState(false);
-    // console.log("🚀 ~ file: Dashboard.jsx:16 ~ Dashboard ~ isAdmin:", isAdmin)
+    const [isAdmin , loading] = useAdmin();
     const navigate = useNavigate();
 
-    const axiosSecure = useAxiosSecure();
-    useEffect(() => {
-        const checkAdmin = async () => {
-            const res = await axiosSecure.get(`/user/id-admin/${user?.email}`);
-            setIsAdmin(res.data.isAdmin);
-        }
-        checkAdmin();
-    }, [])
-
-    if (loader) {
+    if (loading || loader) {
         return <div className="h-screen w-screen flex justify-center items-center">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
         </div>

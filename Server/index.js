@@ -68,6 +68,13 @@ async function run() {
             const menu = await cursor.toArray();
             res.send(menu);
         });
+        // post menu data 
+        app.post('/menu' , verifyJWT , verifyAdmin , async(req , res)=> { 
+            const doc = req.body ; 
+            // console.log(doc)
+            const result = await menuCollection.insertOne(doc)
+            res.send(result)
+        })
         // get reviews
         app.get('/reviews', async (req, res) => {
             const cursor = reviewsCollection.find({});
@@ -121,7 +128,7 @@ async function run() {
         });
 
         // is admin  or not
-        app.get('/user/id-admin/:email', async (req, res) => {
+        app.get('/user/id-admin/:email', verifyJWT ,  async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const matched = await usersCollection.findOne(query);

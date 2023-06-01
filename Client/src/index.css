@@ -23,3 +23,6 @@ body {
   position: static !important;
   margin-top: 30px !important;
 } 
+.add-btn { 
+  background: linear-gradient(90deg, #835D23 0%, #B58130 100%);
+}
