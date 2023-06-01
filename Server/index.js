@@ -53,11 +53,11 @@ async function run() {
         const usersCollection = database.collection("users");
 
         // Database related middleware
-        const verifyAdmin =async (req , res , next) => { 
-            const email = req.decoded.email ; 
-            const user = await usersCollection.findOne({email : email}); 
-            if(user.role !=='admin'){ 
-                return res.status(403).send({error : true , message : 'forbidden access'})
+        const verifyAdmin = async (req, res, next) => {
+            const email = req.decoded.email;
+            const user = await usersCollection.findOne({ email: email });
+            if (user.role !== 'admin') {
+                return res.status(403).send({ error: true, message: 'forbidden access' })
             }
             next()
         }
@@ -69,11 +69,18 @@ async function run() {
             res.send(menu);
         });
         // post menu data 
-        app.post('/menu' , verifyJWT , verifyAdmin , async(req , res)=> { 
-            const doc = req.body ; 
+        app.post('/menu', verifyJWT, verifyAdmin, async (req, res) => {
+            const doc = req.body;
             // console.log(doc)
             const result = await menuCollection.insertOne(doc)
             res.send(result)
+        })
+        // Delete a menu item 
+        app.delete('/menu/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const result = await menuCollection.deleteOne(filter);
+            res.send(result);
         })
         // get reviews
         app.get('/reviews', async (req, res) => {
@@ -122,13 +129,13 @@ async function run() {
         });
 
         // Get user data
-        app.get('/users', verifyJWT , verifyAdmin , async (req, res) => {
+        app.get('/users', verifyJWT, verifyAdmin, async (req, res) => {
             const result = await usersCollection.find().toArray();
             res.send(result);
         });
 
         // is admin  or not
-        app.get('/user/id-admin/:email', verifyJWT ,  async (req, res) => {
+        app.get('/user/id-admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const matched = await usersCollection.findOne(query);
