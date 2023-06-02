@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import Swal from 'sweetalert2';
 import Pagination from '@mui/material/Pagination';
@@ -6,7 +6,7 @@ import { Stack } from '@mui/material';
 import { useCart } from '../../../../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
 const MyCart = () => {
-    const [cart , refetch , isLoading] = useCart(); 
+    const [cart, refetch] = useCart();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(cart.slice(0, 5));
@@ -20,7 +20,7 @@ const MyCart = () => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(cart.slice(start, end));
-    }, [currentPage, cart , isLoading]);
+    }, [currentPage, cart]);
 
     let handelDelete = id => {
         Swal.fire({
@@ -39,7 +39,7 @@ const MyCart = () => {
                     .then(res => res.json())
                     .then(data => {
                         if (data.deletedCount > 0) {
-                            refetch()   
+                            refetch()
                             Swal.fire(
                                 'Deleted!',
                                 'Your item has been deleted.',
@@ -80,7 +80,7 @@ const MyCart = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="gap-7">
-                                            { 
+                                            {
                                                 data.length > 0 ? data.map((item) => (
                                                     <tr key={item._id} className=''>
                                                         <td className="py-4">
@@ -140,27 +140,27 @@ const MyCart = () => {
                                         <span className="font-semibold">Total</span>
                                         <span className="font-semibold">${total}</span>
                                     </div>
-                                    <button onClick={()=>navigate('/dashboard/payment')} className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+                                    <button onClick={() => navigate('/dashboard/payment', { state: { price: total } })} className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     );
 };
 
 export default MyCart;
   /* useEffect(() => {
-        if (user?.email) {
-            fetch(`http://localhost:5000/cart?email=${user?.email}` , { 
-                headers : { 
-                    authorization : `bearer ${localStorage.getItem('token')}`
-                }
-            })
-                .then(res => res.json())
-                .then(data => setCart(data))
-        }
-    }, []) */
+      if (user?.email) {
+          fetch(`http://localhost:5000/cart?email=${user?.email}` , { 
+              headers : { 
+                  authorization : `bearer ${localStorage.getItem('token')}`
+              }
+          })
+              .then(res => res.json())
+              .then(data => setCart(data))
+      }
+  }, []) */
