@@ -1,28 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import Swal from 'sweetalert2';
 import Pagination from '@mui/material/Pagination';
 import { Stack } from '@mui/material';
-import { AuthContext } from '../../../../providers/AuthProvider';
 import { useCart } from '../../../../hooks/useCart';
+import { useNavigate } from 'react-router-dom';
 const MyCart = () => {
-    const { user } = useContext(AuthContext);
-    const [cart , refetch] = useCart()
-    // const [cart, setCart] = useState([]);
-
+    const [cart , refetch , isLoading] = useCart(); 
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(cart.slice(0, 5));
-    /* useEffect(() => {
-        if (user?.email) {
-            fetch(`http://localhost:5000/cart?email=${user?.email}` , { 
-                headers : { 
-                    authorization : `bearer ${localStorage.getItem('token')}`
-                }
-            })
-                .then(res => res.json())
-                .then(data => setCart(data))
-        }
-    }, []) */
     const itemPerPage = 5;
     const totalItem = cart.length;
     const pageCount = Math.ceil(totalItem / itemPerPage);
@@ -32,8 +19,8 @@ const MyCart = () => {
     useEffect(() => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
-        setData(prevData => cart.slice(start, end));
-    }, [currentPage, cart]);
+        setData(cart.slice(start, end));
+    }, [currentPage, cart , isLoading]);
 
     let handelDelete = id => {
         Swal.fire({
@@ -93,34 +80,39 @@ const MyCart = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="gap-7">
-                                            {data.map((item) => (
-                                                <tr key={item._id} className=''>
-                                                    <td className="py-4">
-                                                        <div className="flex items-center">
-                                                            <img
-                                                                className="h-16 w-16 mr-4"
-                                                                src={item.image}
-                                                                alt="Product image"
-                                                            />
-                                                            <span className="font-semibold">{item.name}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4">${item.price}</td>
-                                                    <td className="py-4">
-                                                        <div className="flex items-center">
-                                                            <button className="border rounded-md py-2 px-4 mr-2">-</button>
-                                                            <span className="text-center w-8">1</span>
-                                                            <button className="border rounded-md py-2 px-4 ml-2">+</button>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4">$19.99</td>
-                                                    <td className="py-4">
-                                                        <button className="text-red-500" onClick={() => handelDelete(item._id)}>
-                                                            Delete
-                                                        </button>
-                                                    </td>
+                                            { 
+                                                data.length > 0 ? data.map((item) => (
+                                                    <tr key={item._id} className=''>
+                                                        <td className="py-4">
+                                                            <div className="flex items-center">
+                                                                <img
+                                                                    className="h-16 w-16 mr-4"
+                                                                    src={item.image}
+                                                                    alt="Product image"
+                                                                />
+                                                                <span className="font-semibold">{item.name}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4">${item.price}</td>
+                                                        <td className="py-4">
+                                                            <div className="flex items-center">
+                                                                <button className="border rounded-md py-2 px-4 mr-2">-</button>
+                                                                <span className="text-center w-8">1</span>
+                                                                <button className="border rounded-md py-2 px-4 ml-2">+</button>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4">$19.99</td>
+                                                        <td className="py-4">
+                                                            <button className="text-red-500" onClick={() => handelDelete(item._id)}>
+                                                                Delete
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                )) : <tr>
+                                                    <td colSpan="5" className="text-center">No item found</td>
                                                 </tr>
-                                            ))}
+
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -148,7 +140,7 @@ const MyCart = () => {
                                         <span className="font-semibold">Total</span>
                                         <span className="font-semibold">${total}</span>
                                     </div>
-                                    <button className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+                                    <button onClick={()=>navigate('/dashboard/payment')} className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
                                 </div>
                             </div>
                         </div>
@@ -161,3 +153,14 @@ const MyCart = () => {
 };
 
 export default MyCart;
+  /* useEffect(() => {
+        if (user?.email) {
+            fetch(`http://localhost:5000/cart?email=${user?.email}` , { 
+                headers : { 
+                    authorization : `bearer ${localStorage.getItem('token')}`
+                }
+            })
+                .then(res => res.json())
+                .then(data => setCart(data))
+        }
+    }, []) */

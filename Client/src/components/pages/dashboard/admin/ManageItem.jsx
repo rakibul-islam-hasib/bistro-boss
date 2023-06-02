@@ -5,8 +5,8 @@ import { Pagination, Stack } from '@mui/material';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 
 const ManageItem = () => {
-    const [menu] = useMenu();
-    const axiosSecure = useAxiosSecure(); 
+    const [menu, refetch, loading] = useMenu();
+    const axiosSecure = useAxiosSecure();
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(menu.slice(0, 5));
     const itemPerPage = 8;
@@ -20,9 +20,15 @@ const ManageItem = () => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(menu.slice(start, end));
-    }, [currentPage, menu , pageCount, itemPerPage , totalItem ]);
+    }, [currentPage, loading , menu]);
     const handelDelete = id => {
-        
+        axiosSecure.delete(`/menu/${id}`)
+            .then(result => {
+                if (result.data.deletedCount > 0) {
+                    refetch();
+                    alert('Item deleted successfully')
+                }
+            })
     }
     return (
         <div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
-
+import toast from 'react-hot-toast';
 const AddItem = () => {
     const [image, setImage] = useState(null);
     const axiosSecure = useAxiosSecure()
@@ -13,31 +13,37 @@ const AddItem = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const ObjData = Object.fromEntries(formData)
+        const ObjData = Object.fromEntries(formData);
 
         formData.append('file', image);
 
-        fetch(API_URL, {
-            method: 'POST',
-            body: formData,
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                // console.log('Image upload response:', data);
-                if (data.success) {
-                    const { name, price, category, recipe } = ObjData;
-                    // axiosSecure.post()
-                    const newData = { name, price: Number(price), category, recipe, image: data.data.display_url };
-                    axiosSecure.post('/menu', newData)
-                    .then(result => { 
-                        console.log(result)
-                    })
-                }
-            })
-            .catch((error) => {
-                console.error('Image upload error:', error);
-            });
+        toast.promise(
+            fetch(API_URL, {
+                method: 'POST',
+                body: formData,
+            }).then((res) => res.json()),
+            {
+                loading: 'Uploading image...',
+                success: async (data) => {
+                    if (data.success) {
+                        const { name, price, category, recipe } = ObjData;
+                        const newData = { name, price: Number(price), category, recipe, image: data.data.display_url };
+                        const result = await axiosSecure.post('/menu', newData);
+                        console.log(result);
+                        return 'Image uploaded successfully!';
+                    } else {
+                        throw new Error('Image upload failed!');
+                    }
+                },
+                error: 'Image upload failed!',
+            }
+        ).then((response) => {
+            console.log(response);
+        }).catch((error) => {
+            console.error('Image upload error:', error);
+        });
     };
+
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];

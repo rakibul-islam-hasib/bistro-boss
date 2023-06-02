@@ -4,7 +4,6 @@ import { GiCrossMark } from 'react-icons/gi';
 import { AuthContext } from '../../providers/AuthProvider';
 const Modal = ({ isOpen, onClose }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-  // const [loader, setLoader] = useState(false);
   const { login  , loader} = useContext(AuthContext);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -29,7 +28,6 @@ const Modal = ({ isOpen, onClose }) => {
       console.log(error.code);
     }
   };
-  console.log(loader)
   if (loader) {
     return <div className="h-screen w-screen flex justify-center items-center">
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>

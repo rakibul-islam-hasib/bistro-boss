@@ -10,6 +10,7 @@ import MyCart from "../components/pages/dashboard/user/MyCart";
 import Users from "../components/pages/dashboard/admin/Users";
 import AddItem from "../components/pages/dashboard/admin/AddItem";
 import ManageItem from "../components/pages/dashboard/admin/ManageItem";
+import Payment from "../components/pages/dashboard/user/Payment";
 
 export const router = createBrowserRouter([
     {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
             {
                 path : 'manage-items', 
                 element : <ManageItem /> 
+            }, 
+            {
+                path : 'payment',
+                element : <Payment />
             }
         ]
     }
