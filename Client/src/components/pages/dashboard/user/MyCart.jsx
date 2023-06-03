@@ -11,6 +11,7 @@ const MyCart = () => {
     // const [cart, refetch , isLoading] = useCart();
     const [cart , setCart] = useState([]);
     const axiosSecure  = useAxiosSecure(); 
+    const [ loader, setLoader] = useState(true); 
     const {user} = useContext(AuthContext);
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,9 +23,15 @@ const MyCart = () => {
         setCurrentPage(value);
     };
     useEffect(()=>{
+        setLoader(true)
         axiosSecure.get(`/cart?email=${user.email}`)
         .then(res => {
             setCart(res.data)
+            setLoader(false)
+        })
+        .catch(err => { 
+            console.log(err)
+            setLoader(false);
         })
     },[user , currentPage])
     // console.log('hello ')
@@ -70,6 +77,11 @@ const MyCart = () => {
     const shipping = Math.round(subTotal * 0.2) || 0;
     const total = subTotal + tax + shipping || 0;
     
+    if (loader) {
+        return <div className="">
+            <h1>Loading....</h1>
+        </div>
+    }
 
     return (
         <div>

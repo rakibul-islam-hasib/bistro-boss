@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import useAxiosSecure from '../../../../../hooks/useAxiosSecure';
 import { AuthContext } from '../../../../../providers/AuthProvider';
-// import '../payment/Payment.css'
+import '../payment/Payment.css'
 const CheckoutPayment = ({ price }) => {
     const stripe = useStripe();
     const axiosSecure = useAxiosSecure();
@@ -64,6 +64,7 @@ const CheckoutPayment = ({ price }) => {
             const transactionId = paymentIntent.id;
 
             setTransactionId(transactionId)
+            
 
 
         }

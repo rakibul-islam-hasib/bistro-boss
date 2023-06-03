@@ -53,6 +53,7 @@ async function run() {
         const reviewsCollection = database.collection("reviews");
         const cartCollection = database.collection("cart");
         const usersCollection = database.collection("users");
+        const paymentCollection = database.collection('payments')
 
         // Database related middleware
         const verifyAdmin = async (req, res, next) => {
@@ -105,7 +106,6 @@ async function run() {
             }
             const cursor = cartCollection.find({ email: email });
             const cart = await cursor.toArray();
-            // console.log("🚀 ~ file: index.js:85 ~ app.get ~ cart:", cart)
             res.send(cart);
         });
         app.get('/carts', async (req, res) => {
@@ -175,15 +175,21 @@ async function run() {
         // Payment Related routs 
 
         app.post('/create-payment-intent', async (req, res) => {
-            const { price } = req.body ; 
-            const totalAmount = price*100 ; 
+            const { price } = req.body;
+            const totalAmount = price * 100;
             const paymentIntent = await stripe.paymentIntents.create({
-                amount : totalAmount, 
+                amount: totalAmount,
                 currency: "usd",
-                payment_method_types : ['card']
+                payment_method_types: ['card']
             })
 
-            res.send({clientSecret : paymentIntent.client_secret})
+            res.send({ clientSecret: paymentIntent.client_secret })
+        })
+
+        // ! GET THE PAYMENT AND THEN SET THE PAYMENT RELATED INFO TO SERVER 
+
+        app.post('/post-payment-info', async (req, res) => {
+            // const 
         })
 
         // Send a ping to confirm a successful connection
