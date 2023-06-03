@@ -1,34 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import useAxiosSecure from "./useAxiosSecure";
-
+// import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query"
 const useCart = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
-  const [cart, setCart] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = async () => {
-    if (!loading && user?.email) {
-      setIsLoading(true);
-      try {
-        const res = await axiosSecure(`/cart?email=${user.email}`);
-        setCart(res.data);
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+  const fetchCartData = async () => {
+    const res = await axiosSecure(`/cart?email=${user.email}`);
+    return res.data;
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [user, loading, axiosSecure]);
-
-  const refetch = () => {
-    fetchData();
-  };
+  const { data: cart = [], isLoading, refetch } = useQuery({queryKey : ['cart'] , queryFn : fetchCartData })
 
   return [cart, refetch, isLoading];
 };

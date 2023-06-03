@@ -25,9 +25,9 @@ const NavBar = () => {
     const navigate = useNavigate();
     const { user, logout } = useContext(AuthContext);
     const location = useLocation();
-    const [cart] = useCart();
+    const [cart, , isLoading] = useCart();
     let totalItem = 0;
-    if (user?.email) {
+    if (user?.email && !isLoading) {
         totalItem = cart.length;
     }
 
@@ -45,6 +45,7 @@ const NavBar = () => {
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
+    
     useEffect(() => {
         const handleScroll = () => {
             const currentPosition = window.pageYOffset;
@@ -64,7 +65,11 @@ const NavBar = () => {
             setNavBg('bg-[#15151580]');
         }
     }, [scrollPosition]);
-
+    if (!user?.email) {
+        return <div className="">
+            <h1>Please wait</h1>
+        </div>
+    }
     return (
         <motion.nav
             className={`${navBg}  fixed top-0 transition-colors duration-500 ease-in-out text-white w-full z-10`}
@@ -118,7 +123,7 @@ const NavBar = () => {
                                 }
                                 {
                                     user && <li>
-                                        <button onClick={()=>navigate('/dashboard/my-cart')} className='relative'>
+                                        <button onClick={() => navigate('/dashboard/my-cart')} className='relative'>
                                             <span>
                                                 <BsFillCartCheckFill className='text-2xl text-[#EEFF25]' />
                                             </span>

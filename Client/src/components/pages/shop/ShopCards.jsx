@@ -9,15 +9,15 @@ const ShopCards = ({ data = [] }) => {
     const [carts, refetch] = useCart();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [cart, setCarts] = useState([])
-  /*   useEffect(() => {
-        fetch(`http://localhost:5000/cart?email=${user?.email}`, {
-            headers : {
-                authorization : `bearer ${localStorage.getItem('token')}`
-            }
-        })
-            .then(res => res.json())
-            .then(data => setCarts(data))
-    }, []) */
+    /*   useEffect(() => {
+          fetch(`http://localhost:5000/cart?email=${user?.email}`, {
+              headers : {
+                  authorization : `bearer ${localStorage.getItem('token')}`
+              }
+          })
+              .then(res => res.json())
+              .then(data => setCarts(data))
+      }, []) */
     const openModal = () => {
         setIsModalOpen(true);
     };
@@ -32,7 +32,7 @@ const ShopCards = ({ data = [] }) => {
         }
         if (user && user.email) {
             const { _id, ...itemData } = itm; // Create a new object without the _id field
-            const item = { ...itemData, email: user.email ,  };
+            const item = { ...itemData, email: user.email, itemId: _id };
             fetch('http://localhost:5000/cart', {
                 method: 'POST',
                 headers: {
