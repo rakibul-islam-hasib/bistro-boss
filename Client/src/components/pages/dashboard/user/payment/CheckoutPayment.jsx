@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import useAxiosSecure from '../../../../../hooks/useAxiosSecure';
 import { AuthContext } from '../../../../../providers/AuthProvider';
+// import '../payment/Payment.css'
 const CheckoutPayment = ({ price }) => {
     const stripe = useStripe();
     const axiosSecure = useAxiosSecure();
@@ -9,8 +10,8 @@ const CheckoutPayment = ({ price }) => {
     const [error, setError] = useState('');
     const { user } = useContext(AuthContext);
     const [clientSecret, setClientSecret] = useState();
-    const [transactionId , setTransactionId] = useState(''); 
-    const [processing, setProcessing] = useState(false); 
+    const [transactionId, setTransactionId] = useState('');
+    const [processing, setProcessing] = useState(false);
 
     useEffect(() => {
         axiosSecure.post('/create-payment-intent', { price })
@@ -49,24 +50,24 @@ const CheckoutPayment = ({ price }) => {
                     card: card,
                     billing_details: {
                         name: user?.displayName || 'unknown',
-                        email : user?.email || 'Not_provided'
+                        email: user?.email || 'Not_provided'
                     },
                 },
             },
         );
 
         if (cardConfirmError) {
-            console.log(cardConfirmError , 'from card confirm error')
+            console.log(cardConfirmError, 'from card confirm error')
         }
-        console.log(paymentIntent , 'payment intent')
+        console.log(paymentIntent, 'payment intent')
         if (paymentIntent.status === 'succeeded') {
-            const transactionId = paymentIntent.id ; 
-            
+            const transactionId = paymentIntent.id;
+
             setTransactionId(transactionId)
 
 
         }
-    setProcessing(false)
+        setProcessing(false)
     }
 
 
@@ -90,7 +91,7 @@ const CheckoutPayment = ({ price }) => {
             />
             <p className='text-xs text-red-500 text-center'>{error}</p>
             {transactionId && <p className='text-xs text-green-500'>Your payment is successful . Transaction ID : {transactionId}</p>}
-            <button className='bg-blue-600 px-5 py-2 rounded-lg text-white mt-3' type="submit" disabled={!stripe}>
+            <button className={` ${processing ? 'bg-blue-400' :'bg-blue-600' } px-5 py-2 rounded-lg text-white mt-3`} type="submit" disabled={!stripe || processing}>
                 Pay
             </button>
         </form>
