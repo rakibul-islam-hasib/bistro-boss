@@ -8,27 +8,26 @@ const useCart = () => {
   const [cart, setCart] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!loading && user?.email) {
-        setIsLoading(true);
-        try {
-          const res = await axiosSecure(`/cart?email=${user.email}`);
-          setCart(res.data);
-        } catch (error) {
-          console.error("Error fetching cart:", error);
-        } finally {
-          setIsLoading(false);
-        }
+  const fetchData = async () => {
+    if (!loading && user?.email) {
+      setIsLoading(true);
+      try {
+        const res = await axiosSecure(`/cart?email=${user.email}`);
+        setCart(res.data);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      } finally {
+        setIsLoading(false);
       }
-    };
+    }
+  };
 
-    fetchData(); // Call fetchData directly inside useEffect
-
+  useEffect(() => {
+    fetchData();
   }, [user, loading, axiosSecure]);
 
   const refetch = () => {
-    fetchData(); // Call fetchData when refetch is triggered
+    fetchData();
   };
 
   return [cart, refetch, isLoading];

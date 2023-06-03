@@ -3,7 +3,6 @@ import SectionTitle from '../../../shared/SectionTitle';
 import Swal from 'sweetalert2';
 import Pagination from '@mui/material/Pagination';
 import { Stack } from '@mui/material';
-import { useCart } from '../../../../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 import { AuthContext } from '../../../../providers/AuthProvider';
@@ -37,14 +36,15 @@ const MyCart = () => {
     };
 
     useEffect(() => {
-      fetchData()
+      fetchData();
+      setLoader(false);
     }, [user, currentPage])
     // console.log('hello ')
     useEffect(() => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(cart.slice(start, end));
-    }, [currentPage, cart]);
+    }, [currentPage, cart , loader]);
 
     let handelDelete = id => {
         Swal.fire({
@@ -106,7 +106,6 @@ const MyCart = () => {
                                                 <th className="text-left font-semibold">Product</th>
                                                 <th className="text-left font-semibold">Price</th>
                                                 <th className="text-left font-semibold">Quantity</th>
-                                                <th className="text-left font-semibold">Total</th>
                                                 <th className="text-left font-semibold">Delete</th>
                                             </tr>
                                         </thead>
@@ -132,7 +131,6 @@ const MyCart = () => {
                                                                 <button className="border rounded-md py-2 px-4 ml-2">+</button>
                                                             </div>
                                                         </td>
-                                                        <td className="py-4">$19.99</td>
                                                         <td className="py-4">
                                                             <button className="text-red-500" onClick={() => handelDelete(item._id)}>
                                                                 Delete
@@ -151,6 +149,7 @@ const MyCart = () => {
                                     <Pagination onChange={handelPageChange} count={pageCount} color="primary" />
                                 </Stack>
                             </div>
+                            {/* Summary section  */}
                             <div className="md:w-1/5 md:fixed right-0">
                                 <div className="bg-white rounded-lg shadow-md p-6">
                                     <h2 className="text-lg font-semibold mb-4">Summary</h2>
@@ -171,7 +170,7 @@ const MyCart = () => {
                                         <span className="font-semibold">Total</span>
                                         <span className="font-semibold">${total}</span>
                                     </div>
-                                    <button onClick={() => navigate('/dashboard/payment', { state: { price: total } })} className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+                                    <button disabled={total === 0 ? true : false} onClick={() => navigate('/dashboard/payment', { state: { price: total } })} className={`bg-blue-500 ${total>0 ? 'cursor-pointer' : 'cursor-auto'} text-white py-2 px-4 rounded-lg mt-4 w-full`}>Checkout</button>
                                 </div>
                             </div>
                         </div>
