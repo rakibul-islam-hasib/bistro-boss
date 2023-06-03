@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import Swal from 'sweetalert2';
 import Pagination from '@mui/material/Pagination';
 import { Stack } from '@mui/material';
 import { useCart } from '../../../../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import { AuthContext } from '../../../../providers/AuthProvider';
 const MyCart = () => {
-    const [cart, refetch] = useCart();
+    // const [cart, refetch , isLoading] = useCart();
+    const [cart , setCart] = useState([]);
+    const axiosSecure  = useAxiosSecure(); 
+    const {user} = useContext(AuthContext);
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(cart.slice(0, 5));
@@ -16,11 +21,18 @@ const MyCart = () => {
     const handelPageChange = (event, value) => {
         setCurrentPage(value);
     };
+    useEffect(()=>{
+        axiosSecure.get(`/cart?email=${user.email}`)
+        .then(res => {
+            setCart(res.data)
+        })
+    },[user , currentPage])
+    // console.log('hello ')
     useEffect(() => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(cart.slice(start, end));
-    }, [currentPage, cart]);
+    }, [currentPage, cart ]);
 
     let handelDelete = id => {
         Swal.fire({
@@ -57,6 +69,8 @@ const MyCart = () => {
     const tax = Math.round(subTotal * 0.1) || 0;
     const shipping = Math.round(subTotal * 0.2) || 0;
     const total = subTotal + tax + shipping || 0;
+    
+
     return (
         <div>
             <div className="my-8">

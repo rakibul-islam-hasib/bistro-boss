@@ -1,35 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
 import { useMenu } from '../../../../hooks/useMenu';
 import { Pagination, Stack } from '@mui/material';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import { AuthContext } from '../../../../providers/AuthProvider';
 
 const ManageItem = () => {
-    const [menu, refetch, loading] = useMenu();
+    const [menu, setMenu] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        fetch('http://localhost:5000/menu')
+            .then(res => res.json())
+            .then(result => {
+                setMenu(result)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.log(err)
+                setLoading(false)
+            })
+    }, [])
     const axiosSecure = useAxiosSecure();
     const [currentPage, setCurrentPage] = useState(1);
-    const [data, setData] = useState(menu.slice(0, 5));
+    const [data, setData] = useState([]);
+
     const itemPerPage = 8;
     const totalItem = menu.length;
     const pageCount = Math.ceil(totalItem / itemPerPage);
-    const handelPageChange = (event, value) => {
-        setCurrentPage(value);
-    };
 
     useEffect(() => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
-        setData(menu.slice(start, end));
-    }, [currentPage, loading , menu]);
-    const handelDelete = id => {
-        axiosSecure.delete(`/menu/${id}`)
-            .then(result => {
-                if (result.data.deletedCount > 0) {
-                    refetch();
-                    alert('Item deleted successfully')
-                }
-            })
+        setData(menu.slice(start, end))
+    }, [currentPage , menu])
+
+    const handelPageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await axiosSecure.delete(`/menu/${id}`);
+            const updatedMenu = menu.filter((item) => item._id !== id);
+            setMenu(updatedMenu); // Update the menu state
+            setData(updatedMenu); // Update the data state
+            alert('Item deleted successfully');
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+    };
+
+    if (loading) {
+        return <div className="">
+            <h1>Loading.....</h1>
+        </div>
     }
+
     return (
         <div>
             <div className="my-10">
@@ -62,7 +88,7 @@ const ManageItem = () => {
                                         <span className="bg-[#D1A054] text-white py-1 px-2 rounded-full text-xs">Update</span>
                                     </td>
                                     <td className="py-4 px-6 border-b border-gray-200">
-                                        <span onClick={() => handelDelete(`${item._id}`)} className="bg-green-500 cursor-pointer text-white py-1 px-2 rounded-full text-xs">Delete</span>
+                                        <span onClick={() => handleDelete(`${item._id}`)} className="bg-green-500 cursor-pointer text-white py-1 px-2 rounded-full text-xs">Delete</span>
                                     </td>
                                 </tr>
                             );
