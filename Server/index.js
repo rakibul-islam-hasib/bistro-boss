@@ -189,7 +189,7 @@ async function run() {
         // ! GET THE PAYMENT AND THEN SET THE PAYMENT RELATED INFO TO SERVER 
 
         app.post('/post-payment-info', async (req, res) => {
-            // const 
+            const payment = req.body ; 
         })
 
         // Send a ping to confirm a successful connection

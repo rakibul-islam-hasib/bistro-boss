@@ -32,7 +32,7 @@ const ShopCards = ({ data = [] }) => {
         }
         if (user && user.email) {
             const { _id, ...itemData } = itm; // Create a new object without the _id field
-            const item = { ...itemData, email: user.email };
+            const item = { ...itemData, email: user.email ,  };
             fetch('http://localhost:5000/cart', {
                 method: 'POST',
                 headers: {

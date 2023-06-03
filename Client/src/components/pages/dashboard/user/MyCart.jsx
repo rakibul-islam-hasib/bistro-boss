@@ -9,10 +9,10 @@ import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 import { AuthContext } from '../../../../providers/AuthProvider';
 const MyCart = () => {
     // const [cart, refetch , isLoading] = useCart();
-    const [cart , setCart] = useState([]);
-    const axiosSecure  = useAxiosSecure(); 
-    const [ loader, setLoader] = useState(true); 
-    const {user} = useContext(AuthContext);
+    const [cart, setCart] = useState([]);
+    const axiosSecure = useAxiosSecure();
+    const [loader, setLoader] = useState(true);
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(cart.slice(0, 5));
@@ -22,24 +22,29 @@ const MyCart = () => {
     const handelPageChange = (event, value) => {
         setCurrentPage(value);
     };
-    useEffect(()=>{
-        setLoader(true)
-        axiosSecure.get(`/cart?email=${user.email}`)
-        .then(res => {
-            setCart(res.data)
-            setLoader(false)
-        })
-        .catch(err => { 
-            console.log(err)
-            setLoader(false);
-        })
-    },[user , currentPage])
+    const fetchData = () => {
+        setLoader(true);
+        axiosSecure
+            .get(`/cart?email=${user.email}`)
+            .then((res) => {
+                setCart(res.data);
+                setLoader(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoader(false);
+            });
+    };
+
+    useEffect(() => {
+      fetchData()
+    }, [user, currentPage])
     // console.log('hello ')
     useEffect(() => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(cart.slice(start, end));
-    }, [currentPage, cart ]);
+    }, [currentPage, cart]);
 
     let handelDelete = id => {
         Swal.fire({
@@ -58,7 +63,7 @@ const MyCart = () => {
                     .then(res => res.json())
                     .then(data => {
                         if (data.deletedCount > 0) {
-                            refetch()
+                            fetchData()
                             Swal.fire(
                                 'Deleted!',
                                 'Your item has been deleted.',
@@ -76,7 +81,7 @@ const MyCart = () => {
     const tax = Math.round(subTotal * 0.1) || 0;
     const shipping = Math.round(subTotal * 0.2) || 0;
     const total = subTotal + tax + shipping || 0;
-    
+
     if (loader) {
         return <div className="">
             <h1>Loading....</h1>
@@ -180,13 +185,13 @@ const MyCart = () => {
 
 export default MyCart;
   /* useEffect(() => {
-      if (user?.email) {
-          fetch(`http://localhost:5000/cart?email=${user?.email}` , { 
-              headers : { 
-                  authorization : `bearer ${localStorage.getItem('token')}`
-              }
-          })
-              .then(res => res.json())
-              .then(data => setCart(data))
-      }
-  }, []) */
+    if (user?.email) {
+        fetch(`http://localhost:5000/cart?email=${user?.email}` , { 
+            headers : { 
+                authorization : `bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => setCart(data))
+    }
+}, []) */
