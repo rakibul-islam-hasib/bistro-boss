@@ -189,8 +189,15 @@ async function run() {
         // ! GET THE PAYMENT AND THEN SET THE PAYMENT RELATED INFO TO SERVER 
 
         app.post('/post-payment-info', async (req, res) => {
-            const payment = req.body ; 
-        })
+            const payment = req.body;
+            const itemIds = payment?.cartId;
+            // get the user cart data
+            const deleteResult = await cartCollection.deleteMany({ itemId: { $in: itemIds.map(id => id) } });
+            const paymentResult = await paymentCollection.insertOne(payment);
+
+            res.send({ paymentResult, deleteResult });
+        });
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });

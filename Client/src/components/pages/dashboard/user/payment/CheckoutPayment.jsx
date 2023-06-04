@@ -3,6 +3,8 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import useAxiosSecure from '../../../../../hooks/useAxiosSecure';
 import { AuthContext } from '../../../../../providers/AuthProvider';
 import '../payment/Payment.css'
+import { useCart } from '../../../../../hooks/useCart';
+import axios from 'axios';
 const CheckoutPayment = ({ price }) => {
     const stripe = useStripe();
     const axiosSecure = useAxiosSecure();
@@ -12,7 +14,7 @@ const CheckoutPayment = ({ price }) => {
     const [clientSecret, setClientSecret] = useState();
     const [transactionId, setTransactionId] = useState('');
     const [processing, setProcessing] = useState(false);
-
+    const [cart] = useCart();
     useEffect(() => {
         axiosSecure.post('/create-payment-intent', { price })
             .then(result => {
@@ -64,8 +66,32 @@ const CheckoutPayment = ({ price }) => {
             const transactionId = paymentIntent.id;
 
             setTransactionId(transactionId)
-            
+            if (transactionId) {
+                const payment = {
+                    transactionId,
+                    email: user?.email,
+                    name: user?.displayName,
+                    amount: price,
+                    cartId: cart.map(item => item.itemId)
+                }
+                // axios.post('/post-payment-info', payment)
+                // .then(res => { 
+                //     console.log(res.data)
+                // })
+                fetch('http://localhost:5000/post-payment-info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payment)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                    }) 
+                    // console.log(JSON.stringify(payment), 'payment')
 
+            }
 
         }
         setProcessing(false)
@@ -92,7 +118,7 @@ const CheckoutPayment = ({ price }) => {
             />
             <p className='text-xs text-red-500 text-center'>{error}</p>
             {transactionId && <p className='text-xs text-green-500'>Your payment is successful . Transaction ID : {transactionId}</p>}
-            <button className={` ${processing ? 'bg-blue-400' :'bg-blue-600' } px-5 py-2 rounded-lg text-white mt-3`} type="submit" disabled={!stripe || processing}>
+            <button className={` ${processing ? 'bg-blue-400' : 'bg-blue-600'} px-5 py-2 rounded-lg text-white mt-3`} type="submit" disabled={!stripe || processing}>
                 Pay
             </button>
         </form>

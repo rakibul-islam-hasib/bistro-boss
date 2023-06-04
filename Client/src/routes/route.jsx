@@ -11,6 +11,7 @@ import Users from "../components/pages/dashboard/admin/Users";
 import AddItem from "../components/pages/dashboard/admin/AddItem";
 import ManageItem from "../components/pages/dashboard/admin/ManageItem";
 import Payment from "../components/pages/dashboard/user/payment/Payment";
+import UserRoute from "./userRoute";
 
 export const router = createBrowserRouter([
     {
@@ -65,7 +66,7 @@ export const router = createBrowserRouter([
             }, 
             {
                 path : 'payment',
-                element : <Payment />
+                element : <UserRoute><Payment /></UserRoute>
             }
         ]
     }

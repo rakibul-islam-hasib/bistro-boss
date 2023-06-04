@@ -7,12 +7,10 @@ import { TbStarsFilled } from 'react-icons/tb';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../providers/AuthProvider';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useAdmin } from '../../../hooks/useAdmin';
 
 const Dashboard = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const { loader, user } = useContext(AuthContext);
+    const { loader } = useContext(AuthContext);
     const [isAdmin , loading] = useAdmin();
     const navigate = useNavigate();
 

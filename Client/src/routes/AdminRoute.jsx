@@ -8,7 +8,6 @@ const AdminRoute = ({ children }) => {
     const { user: authUser } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const [isAdmin] = useAdmin();
-    console.log("🚀 ~ file: AdminRoute.jsx:10 ~ AdminRoute ~ isAdmin:", isAdmin)
     if (!isAdmin && authUser?.email) {
         return <Navigate to="/dashboard" />
     }

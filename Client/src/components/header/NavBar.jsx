@@ -65,11 +65,8 @@ const NavBar = () => {
             setNavBg('bg-[#15151580]');
         }
     }, [scrollPosition]);
-    if (!user?.email) {
-        return <div className="">
-            <h1>Please wait</h1>
-        </div>
-    }
+  
+    
     return (
         <motion.nav
             className={`${navBg}  fixed top-0 transition-colors duration-500 ease-in-out text-white w-full z-10`}
