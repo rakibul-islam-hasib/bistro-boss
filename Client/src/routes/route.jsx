@@ -14,6 +14,7 @@ import Payment from "../components/pages/dashboard/user/payment/Payment";
 import UserRoute from "./userRoute";
 import AdminRoute from "./AdminRoute";
 import UserHome from "../components/pages/dashboard/user/home/UserHome";
+import AdminHome from "../components/pages/dashboard/admin/AdminHome";
 
 export const router = createBrowserRouter([
     {
@@ -76,7 +77,10 @@ export const router = createBrowserRouter([
                 path : 'payment',
                 element : <UserRoute><Payment /></UserRoute>
             }, 
-
+            {
+                path : 'admin-home',
+                element : <AdminRoute><AdminHome /></AdminRoute>
+            }
 
         ]
     }
