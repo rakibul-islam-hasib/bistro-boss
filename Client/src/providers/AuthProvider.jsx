@@ -41,6 +41,7 @@ const AuthProvider = ({ children }) => {
         }
     }
     // Observe user state (auth)
+    console.log(loader)
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             setUser(user);
@@ -50,12 +51,12 @@ const AuthProvider = ({ children }) => {
                         // console.log(data.data.token)
                         localStorage.setItem('token', data.data.token)
                     })
+                }
+                else {
+                    localStorage.removeItem('token')
                     setLoader(false);
                 }
-            else {
-                localStorage.removeItem('token')
                 setLoader(false);
-            }
         });
         return () => unsubscribe();
     }, [])

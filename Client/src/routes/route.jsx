@@ -15,6 +15,7 @@ import UserRoute from "./userRoute";
 import AdminRoute from "./AdminRoute";
 import UserHome from "../components/pages/dashboard/user/home/UserHome";
 import AdminHome from "../components/pages/dashboard/admin/AdminHome";
+import DashboardHome from "./DashboardHome";
 
 export const router = createBrowserRouter([
     {
@@ -49,7 +50,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/dashboard",
-                element: <div className="border">Hii</div>
+                element: <DashboardHome />
             }, 
             //! USER ROUTE 
             {

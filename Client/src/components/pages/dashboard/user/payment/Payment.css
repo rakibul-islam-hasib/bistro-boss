@@ -2,16 +2,16 @@
 
 
 
-form {
+/* form {
   max-width: 800px;
   margin: 80px auto;
-}
+} */
 
 label {
   color: #6b7c93;
   font-weight: 300;
   letter-spacing: 0.025em;
-  margin-top: 16px;
+  /* margin-top: 16px; */
   display: block;
 }
 
