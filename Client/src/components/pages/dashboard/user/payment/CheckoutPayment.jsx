@@ -72,7 +72,9 @@ const CheckoutPayment = ({ price }) => {
                     email: user?.email,
                     name: user?.displayName,
                     amount: price,
-                    cartId: cart.map(item => item.itemId)
+                    cartId: cart.map(item => item.itemId), 
+                    date : new Date(),
+                    status : 'pending'
                 }
                 // axiosSecure.post('/post-payment-info', payment)
                 // .then(res => { 

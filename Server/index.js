@@ -202,16 +202,52 @@ async function run() {
             const totalUsers = await usersCollection.estimatedDocumentCount();
             // const totalAmount = await paymentCollection.aggregate([{$group : {_id : null , total : {$sum : '$amount'}}}]).toArray(); 
             const payments = await paymentCollection.find().toArray();
-            const totalAmount = payments.reduce((acc, item) => acc + item.amount, 0); 
-            let totalItem =await menuCollection.estimatedDocumentCount(); 
-            let totalOrder = await paymentCollection.estimatedDocumentCount(); 
-            res.send({ totalUsers, totalAmount  , totalItem , totalOrder})
-        }); 
+            const totalAmount = payments.reduce((acc, item) => acc + item.amount, 0);
+            let totalItem = await menuCollection.estimatedDocumentCount();
+            let totalOrder = await paymentCollection.estimatedDocumentCount();
+            res.send({ totalUsers, totalAmount, totalItem, totalOrder })
+        });
+
+        app.get('/order-stats', async (req, res) => {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'menu',
+                        localField: 'cartId',
+                        foreignField: '_id',
+                        as: 'menuItemData'
+                    }
+                },
+                {
+                    $unwind: '$menuItemData'
+                },
+                {
+                    $group: {
+                        _id: '$menuItemData.category',
+                        count: { $sum: 1 },
+                        total: { $sum: '$menuItemData.price' }
+                    }
+                },
+
+                {
+                    $project: {
+                        category: '$_id',
+                        count: 1,
+                        total: { $round: ['$total', 2] },
+                        _id: 0
+                    }
+                }
+            ]
+
+            const result = await paymentCollection.aggregate(pipeline).toArray();
+            res.send(result)
+
+        })
 
         // ! USER STATS . 
-        app.get('/user-stats' ,async (req , res) => { 
-            let totalItem =await menuCollection.estimatedDocumentCount();
-            res.send({totalItem})
+        app.get('/user-stats', async (req, res) => {
+            let totalItem = await menuCollection.estimatedDocumentCount();
+            res.send({ totalItem })
         })
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
