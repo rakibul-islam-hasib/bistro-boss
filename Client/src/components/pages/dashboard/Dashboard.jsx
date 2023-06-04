@@ -24,7 +24,7 @@ const Dashboard = () => {
         {
             icon: <AiFillHome className="text-2xl" />,
             text: 'Home',
-            to: '/dashboard'
+            to: '/dashboard/user-home'
         },
         {
             icon: <BsFillCalendarCheckFill className="text-2xl" />,
@@ -56,7 +56,7 @@ const Dashboard = () => {
         {
             icon: <AiFillHome className="text-2xl" />,
             text: 'Home',
-            to: '/dashboard'
+            to: '/dashboard/admin-home'
         },
         {
             icon: <BsFillCalendarCheckFill className="text-2xl" />,

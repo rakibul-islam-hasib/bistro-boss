@@ -74,14 +74,15 @@ const CheckoutPayment = ({ price }) => {
                     amount: price,
                     cartId: cart.map(item => item.itemId)
                 }
-                // axios.post('/post-payment-info', payment)
+                // axiosSecure.post('/post-payment-info', payment)
                 // .then(res => { 
-                //     console.log(res.data)
+                //     console.log(res.data , 'from post payment info via axios secure')
                 // })
                 fetch('http://localhost:5000/post-payment-info', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json', 
+                        authorization : `Bearer ${localStorage.getItem('token')}`
                     },
                     body: JSON.stringify(payment)
                 })

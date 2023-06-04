@@ -188,7 +188,7 @@ async function run() {
 
         // ! GET THE PAYMENT AND THEN SET THE PAYMENT RELATED INFO TO SERVER 
 
-        app.post('/post-payment-info', async (req, res) => {
+        app.post('/post-payment-info', verifyJWT, async (req, res) => {
             const payment = req.body;
             const itemIds = payment?.cartId;
             // get the user cart data
@@ -198,7 +198,21 @@ async function run() {
             res.send({ paymentResult, deleteResult });
         });
 
+        app.get('/admin-stats', async (req, res) => {
+            const totalUsers = await usersCollection.estimatedDocumentCount();
+            // const totalAmount = await paymentCollection.aggregate([{$group : {_id : null , total : {$sum : '$amount'}}}]).toArray(); 
+            const payments = await paymentCollection.find().toArray();
+            const totalAmount = payments.reduce((acc, item) => acc + item.amount, 0); 
+            let totalItem =await menuCollection.estimatedDocumentCount(); 
+            let totalOrder = await paymentCollection.estimatedDocumentCount(); 
+            res.send({ totalUsers, totalAmount  , totalItem , totalOrder})
+        }); 
 
+        // ! USER STATS . 
+        app.get('/user-stats' ,async (req , res) => { 
+            let totalItem =await menuCollection.estimatedDocumentCount();
+            res.send({totalItem})
+        })
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
