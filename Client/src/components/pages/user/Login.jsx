@@ -12,7 +12,7 @@ const Login = () => {
         const fromData = new FormData(e.target)
         const data = Object.fromEntries(fromData)
         // console.log(data)
-        login(data.email, data.password)
+        login(data?.email, data?.password)
         .then(() => { 
             setLoader(false);
             navigate('/dashboard'); 

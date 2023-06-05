@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../../providers/AuthProvider';
 import { FaMoneyCheckAlt } from 'react-icons/fa';
+import BarChartCompo from './home/components/ChartJS/BarChart';
 
 const AdminHome = () => {
     const {user } = useContext(AuthContext);
@@ -19,7 +20,7 @@ const AdminHome = () => {
                 <div style={{background: 'linear-gradient(90deg, #BB34F5 0%, #FCDBFF 100%)'}} className="flex justify-center items-center py-5 px-6 gap-5 rounded-xl">
                     <FaMoneyCheckAlt className='text-5xl text-white ' />
                     <div className="">
-                        <h1 className='text-2xl text-white font-bold'>${adminStats?.totalAmount}</h1>
+                        <h1 className='text-2xl text-white font-bold'>${parseFloat(adminStats?.totalAmount).toFixed(1)}</h1>
                         <h1 className='text-2xl text-white font-bold'>Revenue</h1>
                     </div>
                 </div>
@@ -49,7 +50,14 @@ const AdminHome = () => {
                 </div>
                 
             </div>
+            <div className="grid my-9 grid-cols-2">
+                <div className="">
+                    <BarChartCompo />
+                </div>
+                <div className="">
 
+                </div>
+            </div>
         </div>
     );
 };

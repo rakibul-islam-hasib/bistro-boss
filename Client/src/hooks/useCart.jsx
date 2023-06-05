@@ -12,7 +12,7 @@ const useCart = () => {
     return res.data;
   };
 
-  const { data: cart = [], isLoading, refetch } = useQuery({queryKey : ['cart'] , queryFn : fetchCartData })
+  const { data: cart = [], isLoading, refetch } = useQuery({queryKey : ['cart'] , queryFn : fetchCartData , enabled : !!user})
 
   return [cart, refetch, isLoading];
 };

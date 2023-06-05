@@ -176,7 +176,7 @@ async function run() {
 
         app.post('/create-payment-intent', async (req, res) => {
             const { price } = req.body;
-            const totalAmount = price * 100;
+            const totalAmount = parseInt(price) * 100;
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: totalAmount,
                 currency: "usd",
@@ -191,11 +191,13 @@ async function run() {
         app.post('/post-payment-info', verifyJWT, async (req, res) => {
             const payment = req.body;
             const itemIds = payment?.cartId;
+            const itemIdsWithObjectId = itemIds.map(id => new ObjectId(id));
+            payment.cartId = itemIdsWithObjectId;
             // get the user cart data
             const deleteResult = await cartCollection.deleteMany({ itemId: { $in: itemIds.map(id => id) } });
             const paymentResult = await paymentCollection.insertOne(payment);
 
-            res.send({ paymentResult, deleteResult });
+            res.send({ deleteResult, paymentResult });
         });
 
         app.get('/admin-stats', async (req, res) => {
@@ -208,27 +210,41 @@ async function run() {
             res.send({ totalUsers, totalAmount, totalItem, totalOrder })
         });
 
-        app.get('/order-stats', async (req, res) => {
+        app.get('/order-stats', verifyJWT, verifyAdmin, async (req, res) => {
             const pipeline = [
+                // {
+                //     $lookup: {
+                //         from: "menu",
+                //         let: { cartId: "$cartId" },
+                //         pipeline: [
+                //             {
+                //                 $match: {
+                //                     $expr: { $in: ["$_id", "$$cartId"] }
+                //                 }
+                //             }
+                //         ],
+                //         as: "menu_item"
+                //     }
+                // },
+
                 {
                     $lookup: {
                         from: 'menu',
                         localField: 'cartId',
                         foreignField: '_id',
-                        as: 'menuItemData'
+                        as: 'menu_item'
                     }
                 },
                 {
-                    $unwind: '$menuItemData'
+                    $unwind: '$menu_item'
                 },
                 {
                     $group: {
-                        _id: '$menuItemData.category',
+                        _id: '$menu_item.category',
                         count: { $sum: 1 },
-                        total: { $sum: '$menuItemData.price' }
+                        total: { $sum: '$menu_item.price' }
                     }
                 },
-
                 {
                     $project: {
                         category: '$_id',
@@ -237,13 +253,62 @@ async function run() {
                         _id: 0
                     }
                 }
-            ]
+            ];
 
-            const result = await paymentCollection.aggregate(pipeline).toArray();
+            const orderStats = await paymentCollection.aggregate(pipeline).toArray();
+            res.send(orderStats);
+        });
+
+
+
+        // * EXTRA ROUTS
+        app.get('/category-stats', async (req, res) => {
+            try {
+                const pipeline = [
+                    {
+                        $lookup: {
+                            from: 'menu',
+                            localField: 'itemId',
+                            foreignField: '_id',
+                            as: 'menuItems'
+                        }
+                    },
+                    {
+                        $unwind: '$menuItems'
+                    },
+                    {
+                        $group: {
+                            _id: '$menuItems.category',
+                            count: { $sum: 1 }
+                        }
+                    },
+                    {
+                        $project: {
+                            category: '$_id',
+                            count: 1,
+                            _id: 0
+                        }
+                    }
+                ];
+
+                const categoryStats = await paymentCollection.aggregate(pipeline).toArray();
+                res.json(categoryStats);
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: 'Internal server error' });
+            }
+        });
+
+
+
+        app.get('/payments', async (req, res) => {
+            const result = await paymentCollection.find().toArray();
             res.send(result)
-
         })
-
+        app.get('/menus', async (req, res) => {
+            const result = await menuCollection.find().toArray();
+            res.send(result)
+        })
         // ! USER STATS . 
         app.get('/user-stats', async (req, res) => {
             let totalItem = await menuCollection.estimatedDocumentCount();

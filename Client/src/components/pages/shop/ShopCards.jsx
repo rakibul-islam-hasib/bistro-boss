@@ -22,7 +22,6 @@ const ShopCards = ({ data = [] }) => {
         setIsModalOpen(true);
     };
     const onClickHandler = itm => {
-        console.log(itm , 'from onclick handler')
         if (!user || !user.email) {
             openModal();
             return;
@@ -43,7 +42,7 @@ const ShopCards = ({ data = [] }) => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     if (data.insertedId) {
                         toast.success("Item added to cart");
                         refetch();
