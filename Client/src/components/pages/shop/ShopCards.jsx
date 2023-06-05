@@ -22,6 +22,7 @@ const ShopCards = ({ data = [] }) => {
         setIsModalOpen(true);
     };
     const onClickHandler = itm => {
+        console.log(itm , 'from onclick handler')
         if (!user || !user.email) {
             openModal();
             return;

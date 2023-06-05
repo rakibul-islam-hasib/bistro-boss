@@ -10,40 +10,41 @@ const AddItem = () => {
     const categories = ['salad', 'pizza', 'desserts', 'drinks', 'offered'];
     const API_URL = `https://api.imgbb.com/1/upload?key=${KEY}&name=`;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const ObjData = Object.fromEntries(formData);
 
         formData.append('file', image);
 
-        toast.promise(
-            fetch(API_URL, {
+        try {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 body: formData,
-            }).then((res) => res.json()),
-            {
-                loading: 'Uploading image...',
-                success: async (data) => {
-                    if (data.success) {
-                        const { name, price, category, recipe } = ObjData;
-                        const newData = { name, price: Number(price), category, recipe, image: data.data.display_url };
-                        const result = await axiosSecure.post('/menu', newData);
-                        console.log(result);
-                        return 'Image uploaded successfully!';
-                    } else {
-                        throw new Error('Image upload failed!');
-                    }
-                },
-                error: 'Image upload failed!',
-            }
-        ).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            console.error('Image upload error:', error);
-        });
-    };
+            });
+            const data = await response.json();
 
+            if (data.success) {
+                const { name, price, category, recipe } = ObjData;
+                const newData = {
+                    name,
+                    price: Number(price),
+                    category,
+                    recipe,
+                    image: data.data.display_url,
+                };
+
+                const result = await axiosSecure.post('/menu', newData);
+                console.log(result);
+                console.log('Image uploaded successfully!');
+            } else {
+                throw new Error('Image upload failed!');
+            }
+        } catch (error) {
+            console.error('Image upload error:', error);
+            console.log('Image upload failed!');
+        }
+    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];

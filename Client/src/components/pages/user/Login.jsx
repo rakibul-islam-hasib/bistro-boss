@@ -5,7 +5,7 @@ import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-s
 import { AuthContext } from '../../../providers/AuthProvider';
 import { Link, useNavigate } from 'react-router-dom';
 const Login = () => {
-    const { login } = useContext(AuthContext);
+    const { login , setLoader} = useContext(AuthContext);
     const navigate = useNavigate();
     const handelFormSubmit = e => {
         e.preventDefault()
@@ -13,8 +13,9 @@ const Login = () => {
         const data = Object.fromEntries(fromData)
         // console.log(data)
         login(data.email, data.password)
-        .then(result => { 
-            navigate('/dashboard')
+        .then(() => { 
+            setLoader(false);
+            navigate('/dashboard'); 
         })
         .catch(err => {
             console.log(err.code)

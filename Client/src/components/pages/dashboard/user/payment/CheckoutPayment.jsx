@@ -4,24 +4,25 @@ import useAxiosSecure from '../../../../../hooks/useAxiosSecure';
 import { AuthContext } from '../../../../../providers/AuthProvider';
 import '../payment/Payment.css'
 import { useCart } from '../../../../../hooks/useCart';
-import axios from 'axios';
+import { useMenu } from '../../../../../hooks/useMenu';
 const CheckoutPayment = ({ price }) => {
     const stripe = useStripe();
     const axiosSecure = useAxiosSecure();
     const elements = useElements();
+    const [menu] = useMenu();
+    const [cart] = useCart();
+    const [menuItem, setMenuItem] = useState();
     const [error, setError] = useState('');
     const { user } = useContext(AuthContext);
     const [clientSecret, setClientSecret] = useState();
     const [transactionId, setTransactionId] = useState('');
     const [processing, setProcessing] = useState(false);
-    const [cart] = useCart();
     useEffect(() => {
         axiosSecure.post('/create-payment-intent', { price })
             .then(result => {
                 setClientSecret(result.data.clientSecret)
             })
     }, [])
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -72,9 +73,10 @@ const CheckoutPayment = ({ price }) => {
                     email: user?.email,
                     name: user?.displayName,
                     amount: price,
-                    cartId: cart.map(item => item.itemId), 
-                    date : new Date(),
-                    status : 'pending'
+                    cartId: cart.map(item => item.itemId),
+
+                    date: new Date(),
+                    status: 'pending'
                 }
                 // axiosSecure.post('/post-payment-info', payment)
                 // .then(res => { 
@@ -83,16 +85,16 @@ const CheckoutPayment = ({ price }) => {
                 fetch('http://localhost:5000/post-payment-info', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json', 
-                        authorization : `Bearer ${localStorage.getItem('token')}`
+                        'Content-Type': 'application/json',
+                        authorization: `Bearer ${localStorage.getItem('token')}`
                     },
                     body: JSON.stringify(payment)
                 })
                     .then(res => res.json())
                     .then(data => {
                         console.log(data)
-                    }) 
-                    // console.log(JSON.stringify(payment), 'payment')
+                    })
+                // console.log(JSON.stringify(payment), 'payment')
 
             }
 
