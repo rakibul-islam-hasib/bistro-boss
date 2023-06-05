@@ -1,12 +1,7 @@
-import React from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import React, { useEffect, useState } from 'react';
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import useAxiosSecure from '../../../../../../../hooks/useAxiosSecure';
 
-const data = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
-];
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
@@ -20,10 +15,27 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
         </text>
     );
 };
+
 const PieDashboard = () => {
+
+    const [data, setData] = useState([]);
+    const axiosSecure = useAxiosSecure();
+    useEffect(() => {
+        axiosSecure.get('/order-stats')
+            .then(res => {
+                console.log(res.data);
+                setData(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, []) 
+   
     return (
         <ResponsiveContainer width="100%" height="100%">
             <PieChart width={400} height={400}>
+                <Tooltip />
+                <Legend />
                 <Pie
                     data={data}
                     cx="50%"
@@ -32,10 +44,10 @@ const PieDashboard = () => {
                     label={renderCustomizedLabel}
                     outerRadius={80}
                     fill="#8884d8"
-                    dataKey="value"
+                    dataKey="count"
                 >
                     {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell name={entry.category} key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                 </Pie>
             </PieChart>

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../../providers/AuthProvider';
 import { FaMoneyCheckAlt } from 'react-icons/fa';
 import BarChartCompo from './home/components/ChartJS/BarChart';
+import PieDashboard from './home/components/ChartJS/PieDashboard';
 
 const AdminHome = () => {
     const {user } = useContext(AuthContext);
@@ -55,7 +56,7 @@ const AdminHome = () => {
                     <BarChartCompo />
                 </div>
                 <div className="">
-
+                    <PieDashboard />
                 </div>
             </div>
         </div>
