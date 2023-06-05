@@ -261,54 +261,6 @@ async function run() {
 
 
 
-        // * EXTRA ROUTS
-        app.get('/category-stats', async (req, res) => {
-            try {
-                const pipeline = [
-                    {
-                        $lookup: {
-                            from: 'menu',
-                            localField: 'itemId',
-                            foreignField: '_id',
-                            as: 'menuItems'
-                        }
-                    },
-                    {
-                        $unwind: '$menuItems'
-                    },
-                    {
-                        $group: {
-                            _id: '$menuItems.category',
-                            count: { $sum: 1 }
-                        }
-                    },
-                    {
-                        $project: {
-                            category: '$_id',
-                            count: 1,
-                            _id: 0
-                        }
-                    }
-                ];
-
-                const categoryStats = await paymentCollection.aggregate(pipeline).toArray();
-                res.json(categoryStats);
-            } catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Internal server error' });
-            }
-        });
-
-
-
-        app.get('/payments', async (req, res) => {
-            const result = await paymentCollection.find().toArray();
-            res.send(result)
-        })
-        app.get('/menus', async (req, res) => {
-            const result = await menuCollection.find().toArray();
-            res.send(result)
-        })
         // ! USER STATS . 
         app.get('/user-stats', async (req, res) => {
             let totalItem = await menuCollection.estimatedDocumentCount();
