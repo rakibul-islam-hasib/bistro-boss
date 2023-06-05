@@ -210,7 +210,7 @@ async function run() {
             res.send({ totalUsers, totalAmount, totalItem, totalOrder })
         });
 
-        app.get('/order-stats', verifyJWT, verifyAdmin, async (req, res) => {
+        app.get('/order-stats', verifyJWT,  async (req, res) => {
             const pipeline = [
                 // {
                 //     $lookup: {
