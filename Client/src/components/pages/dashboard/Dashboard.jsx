@@ -115,7 +115,7 @@ const Dashboard = () => {
                     </ul>
                 </div>
             </div>
-            <div className="col-span-8 w-full h-full">
+            <div className="col-span-8 sticky right-0 w-full h-full">
                 <Outlet />
             </div>
         </div>

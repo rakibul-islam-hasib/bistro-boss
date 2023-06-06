@@ -45,20 +45,25 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             setUser(user);
             if (user) {
+                setLoader(false); // Move this line here
+
                 axios.post('http://localhost:5000/user/set-token', { email: user.email, name: user.displayName })
                     .then(data => {
                         // console.log(data.data.token)
                         localStorage.setItem('token', data.data.token)
                     })
-                }
-                else {
-                    localStorage.removeItem('token')
-                    setLoader(false);
-                }
+                    .catch(error => {
+                        console.log(error);
+                    });
+            } else {
+                localStorage.removeItem('token');
                 setLoader(false);
+            }
         });
+
         return () => unsubscribe();
-    }, [])
+    }, []);
+
     const contextVale = { user, loader, setLoader, signUp, login, logout, updateUser }
     return (
         <AuthContext.Provider value={contextVale}>
