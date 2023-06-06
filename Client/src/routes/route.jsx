@@ -16,6 +16,7 @@ import AdminRoute from "./AdminRoute";
 import UserHome from "../components/pages/dashboard/user/home/UserHome";
 import AdminHome from "../components/pages/dashboard/admin/AdminHome";
 import DashboardHome from "./DashboardHome";
+import UpdateItem from "../components/pages/dashboard/admin/UpdateItem";
 
 export const router = createBrowserRouter([
     {
@@ -64,11 +65,11 @@ export const router = createBrowserRouter([
             // !ADMIN ROUTE 
             {
                 path: 'users', 
-                element : <Users />
+                element : <AdminRoute><Users /></AdminRoute>
             },
             {
                 path : 'add-item', 
-                element : <AddItem />
+                element : <AdminRoute><AddItem /></AdminRoute>
             }, 
             {
                 path : 'manage-items', 
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
             {
                 path : 'admin-home',
                 element : <AdminRoute><AdminHome /></AdminRoute>
+            }, 
+            {
+                path : 'update-item/:id',
+                element : <AdminRoute><UpdateItem /></AdminRoute>
             }
 
         ]
