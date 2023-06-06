@@ -9,8 +9,8 @@ const Payment = () => {
     const location = useLocation(); 
     const price = location.state?.price ; 
     return (
-        <div>
-            <h1>Payment</h1>
+        <div className='min-h-screen w-full flex justify-center items-center'>
+            
             <Elements stripe={stripePromise}>
                 <CheckoutPayment price={price} /> 
             </Elements>
