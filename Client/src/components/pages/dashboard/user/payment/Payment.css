@@ -7,16 +7,16 @@
   margin: 80px auto;
 } */
 
-label {
+/* label {
   color: #6b7c93;
   font-weight: 300;
   letter-spacing: 0.025em;
-  /* margin-top: 16px; */
+ 
   display: block;
-}
+} */
 
 
-button:hover {
+.StripeElement button:hover {
   color: #fff;
   cursor: pointer;
   background-color: #7795f8;
@@ -28,8 +28,8 @@ button[disabled] {
   opacity: 0.6;
 }
 
-input,
-select {
+.StripeElement input,
+.StripeElement select {
   display: block;
   border: none;
   font-size: 18px;
@@ -45,7 +45,7 @@ select {
   width: 500px;
 }
 
-input::placeholder {
+.StripeElement input::placeholder {
   color: #aab7c4;
 }
 
