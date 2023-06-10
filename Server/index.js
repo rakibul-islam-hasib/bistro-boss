@@ -122,14 +122,26 @@ async function run() {
             res.send(result);
         });
 
-
+        app.get('/item/:id' , async(req , res)=>{
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await menuCollection.findOne(query);
+            res.send(result);
+        })
+        app.patch('/item/:id' , async(req , res)=>{
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedItem = req.body;
+            const result = await menuCollection.updateOne(query , {$set : updatedItem});
+            res.send(result);
+        })
         // Post user data
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
             res.send(result);
         });
-
+    
         // Get user data
         app.get('/users', verifyJWT, verifyAdmin, async (req, res) => {
             const result = await usersCollection.find().toArray();
@@ -210,7 +222,7 @@ async function run() {
             res.send({ totalUsers, totalAmount, totalItem, totalOrder })
         });
 
-        app.get('/order-stats', verifyJWT, verifyAdmin ,  async (req, res) => {
+        app.get('/order-stats', verifyJWT, verifyAdmin, async (req, res) => {
             const pipeline = [
                 // {
                 //     $lookup: {

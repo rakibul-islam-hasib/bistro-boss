@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SectionTitle from '../../../shared/SectionTitle';
-import { useMenu } from '../../../../hooks/useMenu';
 import { Pagination, Stack } from '@mui/material';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
-import { AuthContext } from '../../../../providers/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const ManageItem = () => {
+    const navigate = useNavigate();
     const [menu, setMenu] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -32,7 +32,7 @@ const ManageItem = () => {
         const start = (currentPage - 1) * itemPerPage;
         const end = currentPage * itemPerPage;
         setData(menu.slice(start, end))
-    }, [currentPage , menu])
+    }, [currentPage, menu])
 
     const handelPageChange = (event, value) => {
         setCurrentPage(value);
@@ -85,7 +85,7 @@ const ManageItem = () => {
                                     <td className="py-4 px-6 border-b border-gray-200 truncate">{item.name}</td>
                                     <td className="py-4 px-6 border-b border-gray-200 truncate">{item.price}</td>
                                     <td className="py-4 px-6 border-b border-gray-200">
-                                        <span className="bg-[#D1A054] text-white py-1 px-2 rounded-full text-xs">Update</span>
+                                        <span onClick={()=>navigate(`/dashboard/update-item/${item._id}`)} className="bg-[#D1A054] cursor-pointer text-white py-1 px-2 rounded-full text-xs">Update</span>
                                     </td>
                                     <td className="py-4 px-6 border-b border-gray-200">
                                         <span onClick={() => handleDelete(`${item._id}`)} className="bg-green-500 cursor-pointer text-white py-1 px-2 rounded-full text-xs">Delete</span>
